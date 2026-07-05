@@ -29,7 +29,7 @@ This repository gives the agent broad discretion.
 ### Confirmation steps in commands
 
 - `.claude/commands/commit.md`: change step 6 from "present the message to the user and commit after approval" to "commit directly".
-- `.claude/commands/ship.md`: change step 4 from "push after user confirmation" to "push directly".
+- `.claude/commands/ship.md`: change step 3 from "push after user confirmation" to "push directly".
 - `.claude/commands/babysit-pr.md` works as-is (it already loops autonomously until No New Comment). Even when delegating up to merge, keeping the user-approval precondition of `/merge-pr` is recommended (see "What not to loosen").
 
 ### Hook ask (confirmation) items

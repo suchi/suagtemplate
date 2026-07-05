@@ -2,24 +2,11 @@
 description: Check consistency across docs, code, and ja/en pairs; report only
 ---
 
-Check the consistency of this repository's documentation and report findings. This command only reports; do not change files.
+Check the consistency of this repository's documentation. Report only; do not change files.
 
-## Checks
-
-1. README / AGENTS.md vs reality:
-   - documented commands and script names exist and work
-   - directory structure descriptions match the actual tree
-   - dependency names and versions match the manifests
-2. Japanese/English pairs:
-   - for every `<name>.md` that has a `<name>_en.md`, the heading structure matches and the English content is not stale
-3. ADR (when `docs/adr/` exists):
-   - the index in `docs/adr/README.md` lists every ADR file, and every listed file exists
-   - numbering is sequential; report gaps
-   - deprecated ADRs are marked in the index
-4. Cross-references:
-   - links between documents resolve
-   - no references to deleted or renamed files remain
-
-## Output
+1. README / AGENTS.md vs reality: documented commands exist and work, directory structure matches the tree, dependency names/versions match the manifests.
+2. Japanese/English pairs: for every `<name>.md` with a `<name>_en.md`, headings match and the English content is not stale.
+3. ADR (when `docs/adr/` exists): the index in `docs/adr/README.md` matches the files, numbering is sequential (report gaps), deprecated ADRs are marked.
+4. Cross-references: links between documents resolve; no references to deleted or renamed files remain.
 
 Report findings as a bullet list grouped by severity, in Japanese. If everything is consistent, report "整合性チェック OK".
