@@ -11,4 +11,4 @@ Paste the text below the `---` as is (it is a condensed version due to length li
 
 ---
 
-Write responses, explanations, review comments, and PR/Issue bodies in Japanese. Commit messages: first line in English (Conventional Commits), body in Japanese. Identifiers, comments in code, logs, error messages, and UI labels are in English. When something is ambiguous, do not decide on your own; present options with pros/cons and confirm. Keep commits small; never commit directly to main — use a branch and a PR. Write tests first (TDD). Never hardcode secrets. If the repository has an AGENTS.md, follow it.
+Write responses, explanations, review comments, and PR/Issue bodies in Japanese. PR/Issue titles are in English. Commit messages: first line in English (Conventional Commits), body in Japanese. Identifiers, comments in code, logs, error messages, and UI labels are in English. When something is ambiguous, do not decide on your own; present options with pros/cons and confirm. Keep commits small; never commit directly to main — use a branch and a PR. Write tests first (TDD). Never hardcode secrets. If the repository has an AGENTS.md, follow it.

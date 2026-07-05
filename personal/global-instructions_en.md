@@ -12,7 +12,7 @@ Personal settings shared across all repositories and projects. When a repository
 ## Language
 
 - Conversation, explanations, documents, and PR/Issue bodies: Japanese.
-- Commit message first line, identifiers, branch names, comments in code, logs/error messages/UI labels: English.
+- PR/Issue titles, commit message first line, identifiers, branch names, comments in code, logs/error messages/UI labels: English.
 - Commit message body: Japanese.
 - Draw diagrams with Mermaid. Do not use ASCII-art diagrams.
 

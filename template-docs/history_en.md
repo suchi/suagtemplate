@@ -25,6 +25,7 @@ cc-todo, cc-todo-next, copyhooker, dotfiles-fm, gctetris, sucheme-go, sucheme-ru
 2. Personal configuration takes the form of `personal/` + apply scripts (`install.sh` / `install.ps1`)
 3. Include the ADR scaffolding (`docs/adr/`) in the template
 4. Strings embedded in code (logs, errors, UI labels) default to English, overridable per project
+5. PR/Issue titles are English only; bodies are Japanese (made explicit after the auto-generated body of PR #1 came out in English; reflected in the AGENTS.md language rule table, the PR conventions, and the personal configuration)
 
 ### Main design judgments
 

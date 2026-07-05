@@ -25,6 +25,7 @@ cc-todo、cc-todo-next、copyhooker、dotfiles-fm、gctetris、sucheme-go、such
 2. 個人設定は`personal/`+反映スクリプト(`install.sh`/`install.ps1`)の形にする
 3. ADR雛形(`docs/adr/`)をテンプレートに含める
 4. コード内文字列(ログ・エラー・UIラベル)は英語をデフォルトにし、プロジェクト側で上書き可能とする
+5. PR/Issueはタイトルのみ英語、本文は日本語(UIが自動生成したPR #1の本文が英語だったことを受けて明文化。AGENTS.mdの言語ルール表・PR規約と個人設定に反映)
 
 ### 主な設計判断
 

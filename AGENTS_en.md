@@ -44,6 +44,7 @@ This repository is developed with Agentic Coding, where the human makes the deci
 | --- | --- |
 | Conversation, explanations, progress reports | Japanese |
 | Documents (*.md), PR/Issue bodies, review comments | Japanese |
+| PR/Issue titles | English |
 | Commit message first line | English |
 | Commit message body | Japanese |
 | Identifiers (variables, functions, file names), branch names | English |
@@ -87,7 +88,7 @@ feat: add todo filter feature
 
 ## PR, review, and merge
 
-1. Work on a feature branch and create a PR (PR body in Japanese).
+1. Work on a feature branch and create a PR (title in English, body in Japanese).
 2. Do not write `\n` literals in PR bodies. Use real line breaks (`--body-file` recommended).
 3. Request a Copilot review (`gh pr edit <number> --add-reviewer @copilot`).
 4. Address findings with follow-up commits, reply to each review thread describing the fix, then resolve the thread.
