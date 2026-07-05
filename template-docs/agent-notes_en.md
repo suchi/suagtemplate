@@ -25,7 +25,7 @@ Notes on things that do not take effect mechanically even when written in AGENTS
 - The coding agent (cloud agent) runs in an isolated environment behind a firewall. If dependency installation is needed, provide `.github/workflows/copilot-setup-steps.yml`.
 - Do not remove the coding agent's safety devices: PRs are created as drafts and require human review, the requester cannot approve their own request, and Actions do not run until "Approve and run workflows" is clicked. These are officially designed mitigations (see references).
 - Comments from users without write access are not shown to the agent (an official mitigation). However, instructions hidden in issue bodies can still reach it, so inspect the body carefully when working from externally filed issues.
-- Re-review requests: always `gh pr edit <number> --add-reviewer @copilot` (gh 2.88.0+). Direct REST calls and closing/reopening the PR do not trigger a re-review.
+- Re-review requests: `gh pr edit <number> --add-reviewer @copilot` (gh 2.88.0+); in web sessions use the GitHub MCP `request_copilot_review` tool. Direct REST calls and closing/reopening the PR do not trigger a re-review.
 - Copilot review may falsely flag Dependabot's `cooldown` as an "invalid key" (a deletion incident happened in the past). Per the AGENTS.md security section, never delete it without checking the official docs and getting user approval.
 - Personal custom instructions have a length limit. Use the condensed version in `personal/copilot-personal-instructions.md`.
 
