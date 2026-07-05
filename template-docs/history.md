@@ -134,5 +134,5 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 
 レビュー対応ループ(修正→スレッド返信→resolve→再レビュー依頼→No New Comment)を、環境を問わず`/babysit-pr <PR番号>`の一言で指示できるようにした。
 
-- `/babysit-pr`に「環境への適応」節を追加: ローカル(ghあり)はそのまま、claude.ai/code(Webセッション、ghなし)ではGitHub MCPツール+PRイベント購読(subscribe_pr_activity)で同じループを回し、マージ/クローズまたはユーザーの停止指示で購読解除する。
+- `/babysit-pr`に「環境への適応」節を追加: ローカル(ghあり)はそのまま、claude.ai/code(Webセッション、ghなし)ではGitHub MCPツール+PRイベント購読(`subscribe_pr_activity`)で同じループを回し、マージ/クローズまたはユーザーの停止指示で購読解除する。
 - agent-notesの「babysit-prはローカル用」の記述を実態に合わせて更新した。

@@ -134,5 +134,5 @@ Giving bold the meaning of a heading or label, as in `- bold label: description`
 
 Made the review-handling loop (fix, reply to threads, resolve, request re-review, until No New Comment) invocable with a single `/babysit-pr <PR number>` regardless of environment.
 
-- Added an "Environment adaptation" section to `/babysit-pr`: locally (with gh) it runs as written; in claude.ai/code (web sessions, no gh) it runs the same loop via the GitHub MCP tools plus PR event subscription (subscribe_pr_activity), unsubscribing on merge/close or when the user says to stop.
+- Added an "Environment adaptation" section to `/babysit-pr`: locally (with gh) it runs as written; in claude.ai/code (web sessions, no gh) it runs the same loop via the GitHub MCP tools plus PR event subscription (`subscribe_pr_activity`), unsubscribing on merge/close or when the user says to stop.
 - Updated the "babysit-pr is for local use" statement in agent-notes to match reality.

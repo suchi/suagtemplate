@@ -21,7 +21,7 @@ Check PR #$ARGUMENTS for unresolved review threads and the latest review, and ha
 ## Environment adaptation
 
 - Local Claude Code (gh available): follow the steps above as written. Re-run the loop after each round of fixes until No New Comment.
-- Claude Code on the web (no gh): perform the same steps with the GitHub MCP tools, and subscribe to the PR with the subscribe_pr_activity tool so review comments and CI events arrive automatically. Request (re-)reviews with the `request_copilot_review` MCP tool — the gh command in step 4 is unavailable here, and the REST `requested_reviewers` endpoint must not be substituted for it. Handle each event with the loop above, and unsubscribe once the PR is merged or closed, or when the user says to stop.
+- Claude Code on the web (no gh): perform the same steps with the GitHub MCP tools, and subscribe to the PR with the `subscribe_pr_activity` tool so review comments and CI events arrive automatically. Request (re-)reviews with the `request_copilot_review` MCP tool — the gh command in step 4 is unavailable here, and the REST `requested_reviewers` endpoint must not be substituted for it. Handle each event with the loop above, and unsubscribe once the PR is merged or closed, or when the user says to stop.
 
 ## Important rules
 
