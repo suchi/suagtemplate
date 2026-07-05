@@ -99,3 +99,19 @@ The verification-command table, language-rule table, every security item, the PR
 - Replaced the user-name URL and individual past-repository names with generic wording in 14 places across the documentation (personal, references, history, README, setup-guide). Recorded "no individual repository names or account information" as an ongoing policy in maintenance.md.
 - Added `maintenance.md` / `_en.md`: principles (follow the AGENTS.md flow, one rule one home, promote only generic content, mandatory ja/en sync and history entries), recommended procedures per change type (feeding back knowledge from real projects, hook changes, command/skill changes, periodic tracking of official specs), release operation, and a pre-PR checklist.
 - Bundled the hook test harness as `tests/hook-tests.sh` in the repository (previously a session-local throwaway script). All 38 cases pass. Hook changes now must add matching test cases in the same change.
+
+## 2026-07-05: Root-cause analysis of the line-ending problem, and a no-workaround rule
+
+### Background
+
+Investigated after the report "there was a CRLF file even though .gitattributes specifies LF for md, which was confusing".
+
+- **Cause**: the initial commit's README.md was stored as a blob with CRLF, in a commit made before `.gitattributes` was added. Git attributes only act at commit/checkout time, so CRLF in already-stored blobs persists even after the attributes are added. This is what caused the "README.md shown as modified though untouched" symptom.
+- **Current state**: verified that every blob and the whole working tree are LF (the offending blob was resolved when the template's first commit rewrote it). With the attributes now in effect, even writing CRLF gets normalized to LF at commit time, so a CRLF md can no longer enter the repository.
+- **Lesson**: the anomaly (phantom modified) was observed at the start of the session, yet it was passed over via a rewrite without identifying the cause — exactly a "workaround with the cause unknown", which motivated the rule below.
+
+### Actions
+
+- Added to AGENTS.md "How to work": identify the root cause of unexpected behavior before acting; never route around it with a workaround while the cause is unknown (a breeding ground for vulnerabilities and wrong code/architecture); when unavoidable, record the background and report to the user. The same rule was added to personal/global-instructions.md.
+- New `check-line-endings.sh`: a PostToolUse hook that warns when CRLF is written into a file whose policy is LF (files with a CRLF policy such as `*.ps1` are exempt). Added 3 test cases; all 41 cases pass.
+- setup-guide: added `git add --renormalize .` for retrofitting the template onto existing repositories (prevents the same class of incident as this one).

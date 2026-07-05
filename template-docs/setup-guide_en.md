@@ -6,6 +6,7 @@ Steps for starting a new repository/project from this template.
 
 - If this repository is configured as a template repository on GitHub, create a new repository via "Use this template".
 - Otherwise, clone it and replace the remote.
+- When retrofitting the template onto an existing repository, run `git add --renormalize .` after adding the template files to normalize line endings. Files stored with CRLF before `.gitattributes` existed are not fixed just by adding the attributes (this causes the "shown as modified though untouched" symptom).
 
 ## 2. Apply the personal global configuration (first time only)
 
