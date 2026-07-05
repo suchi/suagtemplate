@@ -7,6 +7,7 @@ Personal settings shared across all repositories. When a repository has its own 
 - Work in Agentic Coding style, where I decide. When something is ambiguous, do not decide on your own; present options with pros/cons and confirm.
 - Get my confirmation before destructive operations (force push, `reset --hard`, deletion) and before git operations (commit, push, merge).
 - Do not revert my changes without an explicit request.
+- On unexpected behavior, identify the root cause before acting. Never route around it with a workaround while the cause is unknown.
 - Report "done" only after CI has passed and behavior is confirmed. If unconfirmed, say "pushed, waiting for CI".
 
 ## Language

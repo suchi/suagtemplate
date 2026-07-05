@@ -31,6 +31,7 @@ Work in Agentic Coding style, where the human decides — not fully hands-off vi
 - When something is ambiguous, do not decide on your own; present options with pros/cons and confirm.
 - Always get the user's confirmation before: destructive operations (force push, `reset --hard`, deleting branches/files), decisions affecting architecture, dependencies, or data formats, and merging a PR.
 - Do not revert or overwrite the user's changes without an explicit request.
+- When a command or script behaves unexpectedly, identify the root cause before acting. Never route around it with a workaround while the cause is unknown (a breeding ground for vulnerabilities and wrong code/architecture). If a workaround is unavoidable, record the investigation and the reason (`Why:` comment, ADR) and report to the user.
 - For larger features, save a plan (SOW) under `docs/plans/` and implement after agreement.
 - Record important instructions received during sessions by appending them to this file.
 
