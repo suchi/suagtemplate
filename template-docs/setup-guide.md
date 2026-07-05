@@ -6,6 +6,7 @@
 
 - GitHubでこのリポジトリをテンプレートリポジトリに設定してあれば、「Use this template」から新規リポジトリを作成する。
 - そうでなければcloneしてremoteを差し替える。
+- 既存のリポジトリへ後付けで適用する場合は、テンプレートのファイル一式を追加したあとに`git add --renormalize .`を実行して改行コードを正規化する。`.gitattributes`より前にCRLFで格納されたファイルは、属性を追加しただけでは直らない(「触っていないのにmodified扱いになる」症状の原因になる)。
 
 ## 2. 個人グローバル設定を反映する(初回のみ)
 
@@ -37,9 +38,9 @@ grep -rn "TODO(project)" .
 
 埋めるもの:
 
-- **プロジェクト概要**: 目的・技術スタック・対象環境を2〜5行
-- **検証コマンド**: セットアップ・テスト・リント・型チェック・ビルドの実コマンド(最重要。コマンドやhooks、CIすべての前提になる)
-- **言語ルールの上書き**: UIラベルを日本語にする場合など(デフォルトはすべて英語)
+- プロジェクト概要: 目的・技術スタック・対象環境を2〜5行
+- 検証コマンド: セットアップ・テスト・リント・型チェック・ビルドの実コマンド(最重要。コマンドやhooks、CIすべての前提になる)
+- 言語ルールの上書き: UIラベルを日本語にする場合など(デフォルトはすべて英語)
 
 同じ変更を`AGENTS_en.md`にも反映する。
 
@@ -57,10 +58,10 @@ grep -rn "TODO(project)" .
 
 ## 8. GitHubリポジトリ設定(ブラウザで実施)
 
-- **Branch protection / ruleset(main)**: PR必須、CIステータスチェック必須、直接push禁止
-- **Copilot code review自動化**: rulesetで「Request pull request review from Copilot」を有効化(または PR作成時に`--add-reviewer @copilot`を運用で徹底)
-- **Actions権限**(GitHub Actionsからgh pr createする場合のみ): Settings → Actions → 「Allow GitHub Actions to create and approve pull requests」を有効化(APIでは変更できない)
-- **ラベル**: `gh pr create --label`を使う場合は事前に作成(存在しないラベル指定はエラーになる)
+- Branch protection / ruleset(main): PR必須、CIステータスチェック必須、直接push禁止
+- Copilot code review自動化: rulesetで「Request pull request review from Copilot」を有効化(または PR作成時に`--add-reviewer @copilot`を運用で徹底)
+- Actions権限(GitHub Actionsからgh pr createする場合のみ): Settings → Actions → 「Allow GitHub Actions to create and approve pull requests」を有効化(APIでは変更できない)
+- ラベル: `gh pr create --label`を使う場合は事前に作成(存在しないラベル指定はエラーになる)
 
 ## 9. LICENSEを決める
 

@@ -6,6 +6,7 @@ Steps for starting a new repository/project from this template.
 
 - If this repository is configured as a template repository on GitHub, create a new repository via "Use this template".
 - Otherwise, clone it and replace the remote.
+- When retrofitting the template onto an existing repository, run `git add --renormalize .` after adding the template files to normalize line endings. Files stored with CRLF before `.gitattributes` existed are not fixed just by adding the attributes (this causes the "shown as modified though untouched" symptom).
 
 ## 2. Apply the personal global configuration (first time only)
 
@@ -37,9 +38,9 @@ grep -rn "TODO(project)" .
 
 Things to fill in:
 
-- **Project overview**: purpose, tech stack, and target environment in 2-5 lines
-- **Verification commands**: the actual setup/test/lint/type-check/build commands (most important — the commands, hooks, and CI all depend on this)
-- **Language rule overrides**: e.g. when UI labels should be Japanese (default is all English)
+- Project overview: purpose, tech stack, and target environment in 2-5 lines
+- Verification commands: the actual setup/test/lint/type-check/build commands (most important — the commands, hooks, and CI all depend on this)
+- Language rule overrides: e.g. when UI labels should be Japanese (default is all English)
 
 Apply the same changes to `AGENTS_en.md`.
 
@@ -57,10 +58,10 @@ Create a workflow under `.github/workflows/` that runs the same verification com
 
 ## 8. GitHub repository settings (in the browser)
 
-- **Branch protection / ruleset (main)**: require PRs, require CI status checks, forbid direct pushes
-- **Automatic Copilot code review**: enable "Request pull request review from Copilot" in a ruleset (or consistently use `--add-reviewer @copilot` when creating PRs)
-- **Actions permission** (only if creating PRs from GitHub Actions): Settings → Actions → enable "Allow GitHub Actions to create and approve pull requests" (cannot be changed via API)
-- **Labels**: create them beforehand if using `gh pr create --label` (specifying a nonexistent label fails)
+- Branch protection / ruleset (main): require PRs, require CI status checks, forbid direct pushes
+- Automatic Copilot code review: enable "Request pull request review from Copilot" in a ruleset (or consistently use `--add-reviewer @copilot` when creating PRs)
+- Actions permission (only if creating PRs from GitHub Actions): Settings → Actions → enable "Allow GitHub Actions to create and approve pull requests" (cannot be changed via API)
+- Labels: create them beforehand if using `gh pr create --label` (specifying a nonexistent label fails)
 
 ## 9. Decide the license
 

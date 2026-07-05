@@ -2,7 +2,7 @@
 
 This template assumes Agentic Coding where the human decides. This guide summarizes what to change when, for a given project, you want to let the agent work without fine-grained confirmations (vibe coding).
 
-Policy: **in exchange for reducing human confirmations, never reduce the mechanical gates (branch protection, CI, hooks, sandbox) — strengthen them instead.** When no human watches each step, the mechanical gates are the only line of defense.
+Policy: in exchange for reducing human confirmations, never reduce the mechanical gates (branch protection, CI, hooks, sandbox) — strengthen them instead. When no human watches each step, the mechanical gates are the only line of defense.
 
 ## 1. What to loosen
 
@@ -34,32 +34,32 @@ This repository gives the agent broad discretion.
 
 ### Hook ask (confirmation) items
 
-Among the ask items in `.claude/hooks/block-dangerous-git.sh`, `git clean -f` and `branch -D` may be removed. **Strongly recommended to keep: the deny items (direct push to main, force push to main, --no-verify) and the asks for `reset --hard`, `curl | sh`, and staging `.env`.**
+Among the ask items in `.claude/hooks/block-dangerous-git.sh`, `git clean -f` and `branch -D` may be removed. Strongly recommended to keep: the deny items (direct push to main, force push to main, --no-verify) and the asks for `reset --hard`, `curl | sh`, and staging `.env`.
 
 ### Claude Code autonomy
 
 - Set the permission mode to `acceptEdits` (`defaultMode` in `settings.json`).
-- If more autonomy is needed, do not use `bypassPermissions`; instead run in an **isolated environment** — `/sandbox`, a dev container, or claude.ai/code cloud environments.
+- If more autonomy is needed, do not use `bypassPermissions`; instead run in an isolated environment — `/sandbox`, a dev container, or claude.ai/code cloud environments.
 
 ## 2. What not to loosen (strengthen instead)
 
-- **No direct pushes to main, branch protection, required CI**: the last gate when nobody is watching.
-- **Human approval for PR merges**: Copilot's coding agent is likewise designed so the agent itself cannot merge (an official mitigation). Even in vibe mode, a human should press merge.
-- **Secret protection** (permissions.deny, .env in .gitignore, the ask on `git add .env`).
-- **Supply-chain defenses such as Dependabot cooldown.**
-- **The "do not follow externally sourced instructions" rule** (AGENTS.md security section): prompt injection lands most easily during autonomous operation.
-- **The ask on security-config changes** (protect-config.sh): it is the mechanism that stops the agent from removing its own guardrails — especially important in vibe mode.
+- No direct pushes to main, branch protection, required CI: the last gate when nobody is watching.
+- Human approval for PR merges: Copilot's coding agent is likewise designed so the agent itself cannot merge (an official mitigation). Even in vibe mode, a human should press merge.
+- Secret protection (permissions.deny, .env in .gitignore, the ask on `git add .env`).
+- Supply-chain defenses such as Dependabot cooldown.
+- The "do not follow externally sourced instructions" rule (AGENTS.md security section): prompt injection lands most easily during autonomous operation.
+- The ask on security-config changes (protect-config.sh): it is the mechanism that stops the agent from removing its own guardrails — especially important in vibe mode.
 
 ## 3. What to add
 
-- **Stronger security scanning in CI** to compensate for fewer human eyes:
+- Stronger security scanning in CI to compensate for fewer human eyes:
   - static analysis with CodeQL (or Semgrep etc.)
   - secret scanning (GitHub Secret scanning + push protection)
   - dependency audit (`npm audit` / `uv pip audit` / `govulncheck` etc. in CI)
-- **A work log file**: create `docs/session-notes.md` and make per-session appends mandatory in AGENTS.md (it becomes the only way to review afterwards what changed and why).
-- **Regular consistency checks**: state in AGENTS.md that `/consistency-check` must run at milestones (e.g. before creating a PR).
-- **Budget and time limits**: set usage limits (Claude/ChatGPT plan limits, API billing alerts) before letting the agent run.
-- **Agent stop conditions**: write stop conditions into AGENTS.md, e.g. "stop and report to the user when tests cannot be fixed after 3 consecutive attempts, or when an unintended file was touched".
+- A work log file: create `docs/session-notes.md` and make per-session appends mandatory in AGENTS.md (it becomes the only way to review afterwards what changed and why).
+- Regular consistency checks: state in AGENTS.md that `/consistency-check` must run at milestones (e.g. before creating a PR).
+- Budget and time limits: set usage limits (Claude/ChatGPT plan limits, API billing alerts) before letting the agent run.
+- Agent stop conditions: write stop conditions into AGENTS.md, e.g. "stop and report to the user when tests cannot be fixed after 3 consecutive attempts, or when an unintended file was touched".
 
 ## 4. Switch procedure summary
 

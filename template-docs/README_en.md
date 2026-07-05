@@ -1,6 +1,6 @@
 # template-docs/ — Documentation of the template itself
 
-This folder documents **the template (suagtemplate) itself** and is deleted in repositories created from the template for actual use.
+This folder documents the template (suagtemplate) itself and is deleted in repositories created from the template for actual use.
 
 - Steps to apply to a new repository: [setup-guide_en.md](setup-guide_en.md)
 - Operating principles for the template itself (how to evolve it): [maintenance_en.md](maintenance_en.md)
@@ -30,6 +30,7 @@ A repository template preconfigured with standard precautions and my personal de
 │   ├── settings.json             Secret-read deny rules + hook registration
 │   ├── hooks/
 │   │   ├── block-dangerous-git.sh    Guard against dangerous git operations
+│   │   ├── protect-config.sh         Guard for security configuration files
 │   │   └── check-docs-en-sync.sh     Japanese/English doc sync reminder
 │   ├── commands/                 /commit /ship /babysit-pr /consistency-check /merge-pr
 │   └── skills/                   adr (create/supersede ADRs), sync-docs-en (ja/en sync)
@@ -52,7 +53,7 @@ Verbose instructions lower agent compliance, so norms are written briefly in AGE
 
 - The Japanese `<name>.md` is canonical; `<name>_en.md` is its English version. When the Japanese version changes, update the English version in the same commit.
 - Exceptions (no English version): thin pointers such as `CLAUDE.md` and `.github/copilot-instructions.md`, and per-project ADRs in real projects.
-- `.claude/commands/` and `.claude/skills/` are **English-based**, because placing `commit_en.md` inside `commands/` would register a duplicate `/commit_en` command. Japanese translations live in [ja/](ja/) (translations are best-effort; English is canonical for these files).
+- `.claude/commands/` and `.claude/skills/` are English-based, because placing `commit_en.md` inside `commands/` would register a duplicate `/commit_en` command. Japanese translations live in [ja/](ja/) (translations are best-effort; English is canonical for these files).
 
 ### Hooks
 
