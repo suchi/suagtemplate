@@ -68,3 +68,21 @@ Already covered in the initial version: merge flow with mandatory human review, 
 ### Verification
 
 The new and changed hook guards were tested with 17 payload patterns, all passing. Incidentally, the hooks committed in the previous round became active during this very session and denied a command containing test payloads — an unplanned live confirmation that the guard actually works.
+
+## 2026-07-05: Conciseness refactoring of the instructions
+
+### Request
+
+Based on Anthropic's guidance (concise instructions get better compliance), review all configuration, remove redundancy, duplication, and contradictions, and rewrite into the optimal form as of July 2026 while keeping the requirements.
+
+### Problems found and fixes
+
+- **ADR rules stated three times** (the same procedure duplicated in AGENTS.md, docs/adr/README.md, and the adr skill) plus a **circular reference** (docs/adr/README.md pointed to "details in AGENTS.md" while AGENTS.md pointed to the README): made `docs/adr/README.md` the single canonical rulebook (complete, including snippets); AGENTS.md now has one line plus a pointer, and the skill shrank to trigger + quick reference.
+- **Duplicated consistency checklists** (nearly identical items in /commit, /ship, and /consistency-check): `/consistency-check` is now canonical; /ship references it, and /commit keeps only a 3-item quick check.
+- **Repeated commit-convention descriptions** (format explained again in AGENTS.md, /commit, /babysit-pr, and personal): AGENTS.md is canonical; commands now say "per AGENTS.md" plus the minimum essentials.
+- **Verbose prose**: compressed each section of AGENTS.md and personal/global-instructions.md without dropping requirements (operations needing confirmation, language rules, prohibitions, security items).
+- Added the design principle "keep instructions concise (one rule, one home)" to template-docs/README.
+
+### What was deliberately kept
+
+The verification-command table, language-rule table, every security item, the PR/review/merge prohibitions, and the babysit-pr operational knowledge (gh 2.88.0 requirement, etc.) were all kept, since each stems from a real past incident or an official recommendation.

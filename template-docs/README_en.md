@@ -42,6 +42,10 @@ A repository template preconfigured with standard precautions and my personal de
 
 Instructions are consolidated in `AGENTS.md`. Copilot and Codex read `AGENTS.md` natively; Claude Code imports it via `@AGENTS.md` in `CLAUDE.md`. Agent-specific files contain only tool-specific settings and never duplicate instructions.
 
+### Keep instructions concise (one rule, one home)
+
+Verbose instructions lower agent compliance, so norms are written briefly in AGENTS.md and procedural detail is split into referenced files. Each rule has exactly one canonical home: ADR rules in `docs/adr/README.md`, the consistency checklist in `.claude/commands/consistency-check.md`, commit conventions in AGENTS.md. Other files point there.
+
 ### Japanese/English sync rule
 
 - The Japanese `<name>.md` is canonical; `<name>_en.md` is its English version. When the Japanese version changes, update the English version in the same commit.

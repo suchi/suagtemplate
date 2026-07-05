@@ -68,3 +68,21 @@ cc-todo、cc-todo-next、copyhooker、dotfiles-fm、gctetris、sucheme-go、such
 ### 検証
 
 新設・変更したフックのガードを17パターンのペイロードでテストし、すべてPASS。なお、このセッション中に前回コミットしたフック自体が有効化され、テストペイロードを含むコマンドがdenyされる(ガードが実際に機能する)ことが図らずも実地確認された。
+
+## 2026-07-05: 指示の簡潔化リファクタリング
+
+### 要望
+
+Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全設定を見直して冗長・重複・矛盾を解消し、要件を維持したまま2026年7月時点で最適な形に書き換える。
+
+### 見つかった問題と対処
+
+- **ADRルールの三重記述**(AGENTS.md・docs/adr/README.md・adrスキルに同じ手順が全文重複)+ **循環参照**(docs/adr/README.mdが「詳細はAGENTS.md」を指し、AGENTS.mdがREADMEを指す): `docs/adr/README.md`を唯一の正(スニペット含む完全版)とし、AGENTS.mdは1行+参照、スキルはトリガー+クイックリファレンスに縮小。
+- **整合性チェックリストの重複**(/commit・/ship・/consistency-checkにほぼ同じ項目): `/consistency-check`を正とし、/shipはそれを参照、/commitは簡易チェック3項目のみに縮小。
+- **コミット規約の重複記述**(AGENTS.md・/commit・/babysit-pr・personalで形式説明を繰り返し): AGENTS.mdを正とし、コマンド側は「AGENTS.mdに従う」+最小限の要点のみに。
+- **文章の冗長**: AGENTS.md・personal/global-instructions.mdの各節を、要件(確認が必要な操作・言語ルール・禁止事項・セキュリティ項目)を欠かさず圧縮。
+- 設計方針「指示は簡潔に(1ルール1か所)」をtemplate-docs/READMEに明文化。
+
+### 削らなかったもの
+
+検証コマンド表・言語ルール表・セキュリティ節の各項目・PR/レビュー/マージの禁止事項・babysit-prの運用ノウハウ(gh 2.88.0要件等)は、いずれも過去の実インシデントまたは公式推奨に由来するため維持。
