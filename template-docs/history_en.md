@@ -36,3 +36,35 @@ cc-todo, cc-todo-next, copyhooker, dotfiles-fm, gctetris, sucheme-go, sucheme-ru
 - **copilot-code-review.yml**: confirmed to be absent from the official docs as of 2026-07. Kept for compatibility with cc-todo, while the Japanese-review instruction inside `copilot-instructions.md` is the primary mechanism.
 - **Dependabot cooldown**: included as a standard supply-chain defense, with "never remove without approval" stated in the AGENTS.md security section (preventing a recurrence of the deletion incident that happened in sucheme-go).
 - **Not adopted**: the no-emoji rule (tbpreview) was adopted as standard; the no-space-between-ASCII-and-Japanese rule (tbpreview) is renderer-dependent, so it is a customization candidate in the setup guide instead. The parallel subagent operation patterns (cc-todo-next) are highly project-dependent and likewise listed as a customization candidate.
+
+## 2026-07-05: Security hardening, references, operation notes, and vibe coding switch guide
+
+### Requests
+
+1. Record the official documents consulted as best-practice sources
+2. Check against the official security recommendations of Anthropic, GitHub, and OpenAI (both preventing vulnerabilities in product code and guarding against dangerous agent behavior), and reflect what is missing
+3. Add caveats for using this template with the three tools that the template itself cannot express
+4. Make clear what to change for vibe-coding-style development
+
+### Result of the check against official recommendations
+
+Among the recommendations common to the three vendors, the following were missing in the initial version and were reflected this time:
+
+- **Do not follow instructions in externally sourced content (prompt injection defense)**: added to the AGENTS.md security section (pointed out in common by Claude Code Security, Copilot cloud agent risks and mitigations, and Codex approvals; demonstrated attacks via issue/PR comments have been reported)
+- **Verify that new dependencies exist and are not typosquatted**: added to AGENTS.md
+- **Prevent committing secret files**: added `.env` patterns to .gitignore; `git add .env` now asks via hook
+- **Direct execution of downloaded scripts (`curl | sh`)**: now asks via hook (matching Claude Code's design of not auto-approving curl/wget, as a guard that also works in other modes)
+- **Prevent the agent from removing its own guardrails**: new protect-config.sh (changes to `.claude/settings.json`, hooks, workflows, and dependabot.yml now ask), modeled on Codex's reviewer policy checking for "persistent security weakening"
+- **Protect credential directories**: added `~/.ssh` and `~/.aws` to permissions.deny
+
+Already covered in the initial version: merge flow with mandatory human review, no direct pushes to main, no hardcoded secrets, Dependabot cooldown, confirmation of destructive operations, verification of generated code (verification commands + CI).
+
+### Added documents
+
+- `references.md` / `_en.md`: list of official documents consulted (with reference date)
+- `agent-notes.md` / `_en.md`: operation notes for Claude Code (hook snapshot behavior, permission modes, no gh in web sessions, etc.), Copilot (nearest AGENTS.md wins, coding agent safety devices, re-review method, etc.), and Codex (no hook mechanism, sandbox defaults, untrusted projects, etc.)
+- `vibe-coding.md` / `_en.md`: vibe coding switch guide (what to loosen / what not to loosen / what to add, with a replacement snippet for AGENTS.md)
+
+### Verification
+
+The new and changed hook guards were tested with 17 payload patterns, all passing. Incidentally, the hooks committed in the previous round became active during this very session and denied a command containing test payloads — an unplanned live confirmation that the guard actually works.

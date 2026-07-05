@@ -78,6 +78,9 @@ Add a LICENSE file, or state the no-license policy explicitly in the README.
 
 ## 11. Per-project customization candidates
 
+- See [agent-notes_en.md](agent-notes_en.md) for detailed per-agent caveats (copy needed items into AGENTS.md).
+- To move toward hands-off development (vibe coding), loosen things following [vibe-coding_en.md](vibe-coding_en.md) (never loosen the security gates).
+
 Adjust AGENTS.md (and the _en version) as needed:
 
 - Make UI labels / ARIA labels Japanese (override the language rule table)

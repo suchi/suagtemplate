@@ -3,6 +3,9 @@
 This folder documents **the template (suagtemplate) itself** and is deleted in repositories created from the template for actual use.
 
 - Steps to apply to a new repository: [setup-guide_en.md](setup-guide_en.md)
+- List of official documents consulted: [references_en.md](references_en.md)
+- Per-agent operation notes (caveats the template cannot express): [agent-notes_en.md](agent-notes_en.md)
+- What to change when switching to vibe coding (hands-off development): [vibe-coding_en.md](vibe-coding_en.md)
 - Change history of the template (session records): [history_en.md](history_en.md)
 - Japanese translations of the `.claude/` commands and skills (English): [ja/](ja/)
 
@@ -49,7 +52,8 @@ Instructions are consolidated in `AGENTS.md`. Copilot and Codex read `AGENTS.md`
 
 | Hook | Event | Behavior |
 | --- | --- | --- |
-| `block-dangerous-git.sh` | PreToolUse (Bash) | Denies direct/force pushes to main/master and `--no-verify`. Escalates force push (other branches), `reset --hard`, `clean -f`, `branch -D`, and committing on main to a user confirmation (ask) |
+| `block-dangerous-git.sh` | PreToolUse (Bash) | Denies direct/force pushes to main/master and `--no-verify`. Escalates force push (other branches), `reset --hard`, `clean -f`, `branch -D`, committing on main, piping downloaded scripts into a shell (`curl \| sh` etc.), and staging `.env` files to a user confirmation (ask) |
+| `protect-config.sh` | PreToolUse (Edit/Write) | Escalates changes to security-defining files (`.claude/settings.json`, `.claude/hooks/`, `.github/workflows/`, `.github/dependabot.yml`) to a user confirmation (ask), preventing the agent from removing its own guardrails |
 | `check-docs-en-sync.sh` | PostToolUse (Edit/Write) | When a Japanese md with an `_en.md` counterpart is edited, reminds the agent to update the English version in the same change |
 
 The hooks are shell scripts; on Windows they run via Git Bash (the same prerequisite as Claude Code's Bash tool). They use `jq` for precise matching when available and fall back to pattern-matching the raw payload otherwise.

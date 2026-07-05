@@ -36,3 +36,35 @@ cc-todo、cc-todo-next、copyhooker、dotfiles-fm、gctetris、sucheme-go、such
 - **copilot-code-review.yml**: 2026-07時点で公式ドキュメントに記載がないことを確認。cc-todoからの互換で残しつつ、確実な手段として`copilot-instructions.md`内の日本語レビュー指示を主とする。
 - **Dependabot cooldown**: サプライチェーン対策として標準装備し、AGENTS.mdのセキュリティ節に「承認なしで削除禁止」を明記(sucheme-goで発生した削除インシデントの再発防止)。
 - **採用しなかったもの**: 絵文字禁止(tbpreview)は標準に採用、ASCII/日本語間スペース規則(tbpreview)はレンダラ依存のため標準にせずsetup-guideのカスタマイズ候補に記載。サブエージェント並列運用パターン(cc-todo-next)はプロジェクト依存が強いため同じくカスタマイズ候補とした。
+
+## 2026-07-05: セキュリティ強化・参考文献・運用ノート・Vibe Coding切替ガイドの追加
+
+### 要望
+
+1. ベストプラクティスとして参照した公式ドキュメントを記録する
+2. Anthropic・GitHub・OpenAIの公式セキュリティ推奨事項(製品コードの脆弱性防止、エージェントの危険行動ガードの両面)と照合し、不足を反映する
+3. 3ツールでこのテンプレートを使う上での、テンプレートで表現しきれない注意点を追加する
+4. Vibe Coding的に開発したい場合の変更点をわかるようにする
+
+### 公式推奨との照合結果
+
+3社共通の推奨のうち、初版時点で不足していたのは以下で、今回反映した:
+
+- **外部由来コンテンツの指示に従わない(プロンプトインジェクション対策)**: AGENTS.mdセキュリティ節に追加(Claude Code Security・Copilot cloud agentリスク緩和・Codex approvalsの3文書が共通して指摘。Issue/PRコメント経由の実証攻撃報告もあり)
+- **依存パッケージの実在・タイポスクワッティング確認**: AGENTS.mdに追加
+- **シークレットファイルのコミット防止**: .gitignoreに`.env`系を追加、`git add .env`をフックでask化
+- **ダウンロードスクリプトの直接実行(`curl | sh`)**: フックでask化(Claude Codeがcurl/wgetを自動承認しない設計に合わせ、他モードでも効くガードとして)
+- **エージェントが自分のガードを外すことの防止**: protect-config.shを新設(`.claude/settings.json`・hooks・workflows・dependabot.ymlの変更をask化)。Codexのレビューアポリシーが「永続的なセキュリティ弱体化」を検査する設計に倣った
+- **認証情報ディレクトリの保護**: permissions.denyに`~/.ssh`・`~/.aws`を追加
+
+初版時点で既にカバーされていたもの: 人間レビュー必須のマージフロー、main直push禁止、シークレットのハードコード禁止、dependabot cooldown、破壊的操作の確認、生成コードの検証(検証コマンド+CI)。
+
+### 追加ドキュメント
+
+- `references.md` / `_en.md`: 参照した公式ドキュメント一覧(参照日付き)
+- `agent-notes.md` / `_en.md`: Claude Code(hooksのスナップショット・permission mode・Web版のgh不在等)、Copilot(AGENTS.md最近接優先・coding agentの安全装置・再レビュー方法等)、Codex(フック機構なし・サンドボックス既定・untrusted等)の運用ノート
+- `vibe-coding.md` / `_en.md`: Vibe Coding切替ガイド(緩めるもの/緩めないもの/追加するもの、AGENTS.md差し替えスニペット付き)
+
+### 検証
+
+新設・変更したフックのガードを17パターンのペイロードでテストし、すべてPASS。なお、このセッション中に前回コミットしたフック自体が有効化され、テストペイロードを含むコマンドがdenyされる(ガードが実際に機能する)ことが図らずも実地確認された。
