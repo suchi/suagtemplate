@@ -129,3 +129,10 @@ Giving bold the meaning of a heading or label, as in `- bold label: description`
 - Added to the AGENTS.md language rules: do not use bold as a substitute for headings or labels; write labeled list items as "Title: description" (the colon separator was adopted as the common convention in English technical writing).
 - Fixed the existing documents in one pass: all bold labels and bold emphasis in the 10 files under template-docs were converted to plain text.
 - Lesson from the fix: the bulk replacement also stripped the `**` from `feature/**` (a glob pattern inside a code span), which had to be restored. When bulk-replacing formatting characters, watch out for the same characters inside code spans and code blocks.
+
+## 2026-07-05: Environment adaptation of babysit-pr (starting the review loop with one command)
+
+Made the review-handling loop (fix, reply to threads, resolve, request re-review, until No New Comment) invocable with a single `/babysit-pr <PR number>` regardless of environment.
+
+- Added an "Environment adaptation" section to `/babysit-pr`: locally (with gh) it runs as written; in claude.ai/code (web sessions, no gh) it runs the same loop via the GitHub MCP tools plus PR event subscription (subscribe_pr_activity), unsubscribing on merge/close or when the user says to stop.
+- Updated the "babysit-pr is for local use" statement in agent-notes to match reality.

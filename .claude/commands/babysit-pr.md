@@ -18,6 +18,11 @@ Check PR #$ARGUMENTS for unresolved review threads and the latest review, and ha
 4. Request a Copilot re-review: ALWAYS `gh pr edit $ARGUMENTS --add-reviewer @copilot` (requires gh >= 2.88.0). The REST endpoint `.../requested_reviewers` does not trigger a re-review on an already-reviewed PR.
 5. When no unresolved threads remain and the latest review generated no new comments, report "No New Comment 達成". Do NOT merge — merging requires explicit user approval (/merge-pr).
 
+## Environment adaptation
+
+- Local Claude Code (gh available): follow the steps above as written. Re-run the loop after each round of fixes until No New Comment.
+- Claude Code on the web (no gh): perform the same steps with the GitHub MCP tools, and subscribe to the PR with the subscribe_pr_activity tool so review comments and CI events arrive automatically. Handle each event with the loop above, and unsubscribe once the PR is merged or closed, or when the user says to stop.
+
 ## Important rules
 
 - Reply BEFORE resolving a thread (prevents Copilot from repeating the finding).

@@ -15,7 +15,7 @@ Notes on things that do not take effect mechanically even when written in AGENTS
 - On Windows, hooks (shell scripts) require Git Bash — the same prerequisite as the Bash tool itself.
 - The default permission mode is recommended. Hook deny/ask still works in `acceptEdits`. Do not use `bypassPermissions`. To increase autonomy, prefer `/sandbox` (filesystem/network isolation), dev containers, or cloud environments over loosening modes (as recommended by the official Security docs).
 - The project's permissions.deny protects only a limited scope. This template's `settings.json` denies reads of the project's `.env` files and of `~/.ssh` / `~/.aws`, but it is not exhaustive. For sensitive repositories, audit regularly with `/permissions`.
-- claude.ai/code (web) sessions have no gh CLI. GitHub operations go through the GitHub MCP tools. The `/babysit-pr` and `/merge-pr` commands assume gh and are for local use; in web sessions the steps get adapted.
+- claude.ai/code (web) sessions have no gh CLI. GitHub operations go through the GitHub MCP tools. `/babysit-pr` has environment-adaptation instructions built in and runs the same loop via GitHub MCP plus PR event subscription in web sessions. `/merge-pr` assumes gh and is for local use.
 - Do not approve the first-open trust prompt out of habit. Check unfamiliar repositories and MCP servers first.
 - Both `~/.claude/CLAUDE.md` (personal memory) and the repository CLAUDE.md are loaded. Contradictions confuse the agent, which is why personal/global-instructions.md explicitly states that the repository side wins.
 
