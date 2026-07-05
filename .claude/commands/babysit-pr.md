@@ -1,0 +1,25 @@
+---
+description: Watch a PR, fix review findings, and loop until No New Comment
+argument-hint: <PR number>
+---
+
+Check PR #$ARGUMENTS for unresolved review threads and the latest review, and handle them.
+
+## Steps
+
+1. Get the latest reviews: `gh api repos/{owner}/{repo}/pulls/$ARGUMENTS/reviews`
+2. List unresolved threads (`isResolved: false`) via `gh api graphql`
+3. For each finding:
+   a. Fix the code and run the verification commands from AGENTS.md
+   b. Commit (format per AGENTS.md) and push
+   c. Reply to the thread in Japanese describing the fix
+      (`gh api repos/{owner}/{repo}/pulls/$ARGUMENTS/comments --method POST -f body="修正しました: ..." -F in_reply_to=COMMENT_ID`)
+   d. Resolve the thread with the `resolveReviewThread` GraphQL mutation
+4. Request a Copilot re-review: ALWAYS `gh pr edit $ARGUMENTS --add-reviewer @copilot` (requires gh >= 2.88.0). The REST endpoint `.../requested_reviewers` does not trigger a re-review on an already-reviewed PR.
+5. When no unresolved threads remain and the latest review generated no new comments, report "No New Comment 達成". Do NOT merge — merging requires explicit user approval (/merge-pr).
+
+## Important rules
+
+- Reply BEFORE resolving a thread (prevents Copilot from repeating the finding).
+- Never close/reopen or recreate the PR for a re-review (does not work; ruins history).
+- Never call `DELETE .../requested_reviewers` (breaks reviewer state).
