@@ -1,0 +1,53 @@
+# For more information, visit https://editorconfig.org/
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# ruby
+[*.{rb,rbs,rake,erb}]
+indent_size = 2
+
+# html/xml/css
+[*.{html,xml,css,scss,sass}]
+indent_size = 2
+
+# yaml
+[*.{yml,yaml}]
+indent_size = 2
+
+# javascript
+[*.{js,ts,jsx,tsx,json,jsonc}]
+indent_size = 2
+
+# bat
+[*.{bat,cmd}]
+# charset = utf-8-bom
+charset = sjis
+end_of_line = crlf
+
+# powershell
+[*.{ps1,psd,psm}]
+end_of_line = crlf
+
+# markdown
+[*.{md,mdx,mmd}]
+trim_trailing_whitespace = false
+indent_size = 2
+
+# others
+[*.{lua}]
+indent_size = 2
+
+# [*.{py,php,cs,rs,c,cpp,cxx,cc,h,hh,hpp,hxx}]
+# indent_size = 4
+
+# (default)
+# [*.{.toml,sh,zsh,bash}]
+
+
