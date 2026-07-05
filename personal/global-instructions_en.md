@@ -1,36 +1,31 @@
 # Personal global instructions
 
-Personal settings shared across all repositories and projects. When a repository has its own `AGENTS.md`, that file takes precedence (this file complements it).
+Personal settings shared across all repositories. When a repository has its own `AGENTS.md`, that file takes precedence.
 
-## Basic stance (Agentic Coding)
+## How to work
 
-- Work in a style where I make the decisions — not fully hands-off vibe coding.
-- When something is ambiguous or open to interpretation, do not decide on your own; present options with pros/cons and confirm.
-- Get my confirmation before destructive operations (force push, `reset --hard`, deleting branches/files) and before git operations (commit, push, merge).
-- Do not revert or overwrite my changes without an explicit request.
+- Work in Agentic Coding style, where I decide. When something is ambiguous, do not decide on your own; present options with pros/cons and confirm.
+- Get my confirmation before destructive operations (force push, `reset --hard`, deletion) and before git operations (commit, push, merge).
+- Do not revert my changes without an explicit request.
+- Report "done" only after CI has passed and behavior is confirmed. If unconfirmed, say "pushed, waiting for CI".
 
 ## Language
 
-- Conversation, explanations, documents, and PR/Issue bodies: Japanese.
-- PR/Issue titles, commit message first line, identifiers, branch names, comments in code, logs/error messages/UI labels: English.
-- Commit message body: Japanese.
-- Draw diagrams with Mermaid. Do not use ASCII-art diagrams.
+- Japanese: conversation, explanations, documents, PR/Issue bodies, commit message bodies.
+- English: PR/Issue titles, commit message first lines, identifiers, branch names, comments in code, logs/errors/UI labels.
+- Draw diagrams with Mermaid (no ASCII art).
 
 ## Development style
 
-- Keep commits small (one commit = one logical change) and follow Conventional Commits.
+- One commit = one logical change. Follow Conventional Commits.
 - Never commit directly to `main`. Work on a branch and open a PR.
-- Follow TDD (t_wada style): Red, Green, Refactor.
-- Do not report "done" after merely committing and pushing. Confirm CI has passed and the change works before calling it done. If you cannot confirm, say "pushed, waiting for CI".
+- TDD (t_wada style): Red → Green → Refactor.
 
-## Tool preferences
+## Tools and environment
 
-- For Python, use the uv ecosystem instead of pip (`uv sync --locked`, `uv run pytest`; always `--locked` in CI/CD).
-- Be careful when adding new dependencies. Never remove supply-chain defenses (Dependabot `cooldown`, uv's `exclude-newer = "7d"`, etc.) without my approval.
-
-## Environment
-
-- Main development environments are Windows 11 (PowerShell) and WSL2. Confirm which environment applies before giving paths or command examples.
+- For Python use uv, not pip (`uv sync --locked`, `uv run pytest`; always `--locked` in CI/CD).
+- Add dependencies carefully. Never remove supply-chain defenses (Dependabot `cooldown`, uv's `exclude-newer = "7d"`) without my approval.
+- Main environments are Windows 11 (PowerShell) and WSL2. Confirm which one applies before giving paths or command examples.
 
 ## When starting a new repository
 
