@@ -84,4 +84,12 @@ if has 'git[[:space:]]+commit'; then
   fi
 fi
 
+if has '(curl|wget)[^|;&]*\|[[:space:]]*(sudo[[:space:]]+)?[a-z]*sh([[:space:]]|$)'; then
+  emit ask "Piping a downloaded script directly into a shell. Inspect the script and confirm with the user first (AGENTS.md: security)."
+fi
+
+if has 'git[[:space:]]+add[^|;&]*\.env' && ! has '\.env\.(example|sample|template)'; then
+  emit ask "Staging a .env file. Secrets must not be committed (AGENTS.md: security). Confirm with the user first."
+fi
+
 exit 0

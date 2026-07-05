@@ -5,7 +5,9 @@
       "Read(./.env.*)",
       "Read(./**/*.pem)",
       "Read(./**/*.key)",
-      "Read(./**/secrets/**)"
+      "Read(./**/secrets/**)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)"
     ]
   },
   "hooks": {
@@ -16,6 +18,15 @@
           {
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/block-dangerous-git.sh\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/protect-config.sh\""
           }
         ]
       }
