@@ -1,18 +1,27 @@
 # ADR (Architecture Decision Records)
 
-Records of technology choices and design decisions. One decision per file, named `NNNN-title.md` (4-digit zero-padded sequential number; title in English kebab-case). The body is written in Japanese.
+Records of technology choices and design decisions. One decision per file, named `NNNN-title.md` (4-digit zero-padded sequential number; English kebab-case title), body in Japanese. Template: [0000-template.md](0000-template.md).
 
-- Template: [0000-template.md](0000-template.md)
-- Detailed rules: the "ADR" section of `AGENTS.md` at the repository root
+## Rules
 
-## Rules (summary)
-
-- Whenever a technology choice or design decision is made, record an ADR.
+- Record an ADR for every technology choice or design decision. The number is the existing maximum + 1. Add it to the index below.
 - Never overwrite or edit an existing ADR. When a decision changes:
-  1. Change the old ADR's status from 採用 (accepted) to 非推奨 (deprecated), and add a link to the new ADR with the reason at the top
-  2. Create a new ADR with the next number, referencing the old ADR it replaces
-  3. Update the list in this README, marking the deprecation
-- When keeping the status quo despite review findings, add a `Why:` comment in the code and record it in an ADR as well.
+  1. Change the old ADR's status from 採用 (accepted) to 非推奨 (deprecated) and add at the top:
+
+     ```markdown
+     - ステータス: ~~採用~~ 非推奨 → [ADR-NNNN: new-title](NNNN-new-title.md) に置き換え
+
+     > 非推奨理由: ...
+     ```
+
+  2. Create a new ADR with the next number, stating the replacement:
+
+     ```markdown
+     - 置き換え: [ADR-NNNN: old-title](NNNN-old-title.md) を非推奨とし、本ADRが最新の決定となる
+     ```
+
+  3. Update the index below, marking the deprecation.
+- When keeping the status quo for technical or environmental reasons despite review findings, add a 1-3 line `Why:` comment (referencing the ADR number) at the code and record it in an ADR as well.
 
 ## Index
 
