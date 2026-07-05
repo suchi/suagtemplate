@@ -29,5 +29,4 @@ Personal settings shared across all repositories. When a repository has its own 
 
 ## When starting a new repository
 
-- Agent configuration template: https://github.com/suchi/suagtemplate
-- If a repository has no `AGENTS.md`, suggest adopting it from the template.
+- If a repository has no `AGENTS.md`, suggest adopting it from the agent configuration template (the suagtemplate repository).

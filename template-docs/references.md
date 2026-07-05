@@ -44,5 +44,5 @@
 
 ## 補足
 
-- 上記に加えて、オーナーの過去リポジトリ(cc-todo・cc-todo-next・sucheme-go等)で蓄積された運用知見(Copilot再レビューは`gh pr edit --add-reviewer @copilot`、gh 2.88.0以上が必要、PRクローズ/リオープンでは再レビューされない等)を反映している。経緯は[history.md](history.md)を参照。
+- 上記に加えて、オーナーが過去リポジトリのエージェント運用で蓄積した知見(Copilot再レビューは`gh pr edit --add-reviewer @copilot`、gh 2.88.0以上が必要、PRクローズ/リオープンでは再レビューされない等)を反映している。経緯は[history.md](history.md)を参照。
 - `.github/copilot-code-review.yml`は参照日時点で公式ドキュメントに記載が確認できなかった(検索で確認)。互換目的で同梱している。

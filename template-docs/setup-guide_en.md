@@ -87,5 +87,5 @@ Adjust AGENTS.md (and the _en version) as needed:
 - Allow emoji in documents
 - Add a rule against spaces between ASCII and Japanese characters (for environments where the renderer inserts them automatically)
 - Add test coverage targets and test count standards
-- Add parallel subagent operation patterns (for larger projects; see cc-todo-next's AGENTS.md)
+- Add parallel subagent operation patterns (for larger projects)
 - Add framework-specific conventions (e.g. enforcing named imports for React types)

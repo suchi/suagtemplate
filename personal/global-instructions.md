@@ -29,5 +29,4 @@
 
 ## 新しいリポジトリを始めるとき
 
-- エージェント設定テンプレート: https://github.com/suchi/suagtemplate
-- リポジトリに`AGENTS.md`がなければ、テンプレートからの導入を提案する。
+- リポジトリに`AGENTS.md`がなければ、エージェント設定テンプレート(suagtemplateリポジトリ)からの導入を提案する。

@@ -44,5 +44,5 @@ Official documentation consulted as best-practice sources for the design and con
 
 ## Notes
 
-- In addition to the above, the template reflects operational knowledge accumulated in the owner's past repositories (cc-todo, cc-todo-next, sucheme-go, etc.), such as: Copilot re-reviews require `gh pr edit --add-reviewer @copilot`, gh 2.88.0 or later is needed, and closing/reopening a PR does not trigger a re-review. See [history_en.md](history_en.md) for background.
+- In addition to the above, the template reflects operational knowledge the owner accumulated while running agents in past repositories, such as: Copilot re-reviews require `gh pr edit --add-reviewer @copilot`, gh 2.88.0 or later is needed, and closing/reopening a PR does not trigger a re-review. See [history_en.md](history_en.md) for background.
 - `.github/copilot-code-review.yml` could not be confirmed in the official documentation as of the reference date (checked via search). It is bundled for compatibility.
