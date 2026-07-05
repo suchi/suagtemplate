@@ -17,7 +17,7 @@ A record of the process of improving this template together with agents. For eac
 
 ### Reference material
 
-The full set of agent configuration files (AGENTS.md, CLAUDE.md, copilot-instructions.md, commands, etc.) from 10 of the owner's past repositories. As a policy, individual repository names and account information are not recorded in this repository's documentation.
+The full set of agent configuration files (AGENTS.md, CLAUDE.md, copilot-instructions.md, commands, etc.) from the owner's past repositories. As a policy, details such as individual repository names, account information, and counts are not recorded in this repository's documentation.
 
 ### Decisions made during the session (Q&A)
 

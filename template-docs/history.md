@@ -17,7 +17,7 @@
 
 ### 参考にした資料
 
-オーナーの過去リポジトリ10件のエージェント設定ファイル一式(AGENTS.md・CLAUDE.md・copilot-instructions.md・commands等)。個別のリポジトリ名・アカウント情報は本リポジトリのドキュメントには記載しない方針。
+オーナーの過去リポジトリのエージェント設定ファイル一式(AGENTS.md・CLAUDE.md・copilot-instructions.md・commands等)。個別のリポジトリ名・アカウント情報・件数などの詳細は本リポジトリのドキュメントには記載しない方針。
 
 ### セッション中の決定事項(Q&A)
 
