@@ -122,6 +122,30 @@ sync_case 0 "en doc itself"              "$root/AGENTS_en.md"
 sync_case 0 "pointer without en"         "$root/CLAUDE.md"
 sync_case 0 "non-markdown file"          "$root/.claude/settings.json"
 
+echo "== check-line-endings.sh =="
+le_hook=.claude/hooks/check-line-endings.sh
+le_case() {
+  # $1: expected exit code, $2: description, $3: file path
+  printf '%s' "$(path_payload "$3")" | sh "$le_hook" >/dev/null 2>&1
+  code=$?
+  if [ "$code" = "$1" ]; then
+    echo "PASS [exit $1] $2"
+  else
+    echo "FAIL [$2] expected exit=$1 got=$code"
+    fails=$((fails + 1))
+  fi
+}
+le_md_crlf="$root/tmp-hook-test-crlf.md"
+le_md_lf="$root/tmp-hook-test-lf.md"
+le_ps1="$root/tmp-hook-test.ps1"
+printf 'line one\r\nline two\r\n' > "$le_md_crlf"
+printf 'line one\nline two\n' > "$le_md_lf"
+printf 'Write-Host "x"\r\n' > "$le_ps1"
+le_case 2 "md with CRLF"              "$le_md_crlf"
+le_case 0 "md with LF"                "$le_md_lf"
+le_case 0 "ps1 with CRLF (policy ok)" "$le_ps1"
+rm -f "$le_md_crlf" "$le_md_lf" "$le_ps1"
+
 rm -rf "$nojq_path"
 
 echo

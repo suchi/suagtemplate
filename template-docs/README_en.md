@@ -61,6 +61,7 @@ Verbose instructions lower agent compliance, so norms are written briefly in AGE
 | `block-dangerous-git.sh` | PreToolUse (Bash) | Denies direct/force pushes to main/master and `--no-verify`. Escalates force push (other branches), `reset --hard`, `clean -f`, `branch -D`, committing on main, piping downloaded scripts into a shell (`curl \| sh` etc.), and staging `.env` files to a user confirmation (ask) |
 | `protect-config.sh` | PreToolUse (Edit/Write) | Escalates changes to security-defining files (`.claude/settings.json`, `.claude/hooks/`, `.github/workflows/`, `.github/dependabot.yml`) to a user confirmation (ask), preventing the agent from removing its own guardrails |
 | `check-docs-en-sync.sh` | PostToolUse (Edit/Write) | When a Japanese md with an `_en.md` counterpart is edited, reminds the agent to update the English version in the same change |
+| `check-line-endings.sh` | PostToolUse (Edit/Write) | Warns the agent when CRLF is written into a file whose `.gitattributes` policy is LF (files with a CRLF policy such as `*.ps1` are exempt) |
 
 The hooks are shell scripts; on Windows they run via Git Bash (the same prerequisite as Claude Code's Bash tool). They use `jq` for precise matching when available and fall back to pattern-matching the raw payload otherwise.
 
