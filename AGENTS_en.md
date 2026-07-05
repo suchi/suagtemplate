@@ -52,6 +52,7 @@ Work in Agentic Coding style, where the human decides — not fully hands-off vi
 
 - Draw diagrams with Mermaid. No ASCII-art diagrams.
 - No emoji in documents.
+- Do not use bold as a substitute for headings or labels (do not express structural meaning through formatting). Write labeled list items as "Title: description".
 
 ## Development flow
 

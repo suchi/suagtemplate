@@ -29,13 +29,13 @@
 
 ### 主な設計判断
 
-- **AGENTS.md単一ソース**: CopilotとCodexはAGENTS.mdをネイティブサポート(Copilotのコードレビュー/コーディングエージェント対応は2025-11のGitHub変更ログで確認)。Claude Codeは`CLAUDE.md`の`@AGENTS.md`でインポート。
-- **薄いポインタファイルには_en版を作らない**: `CLAUDE.md`・`.github/copilot-instructions.md`は翻訳対象外とし、ルールをAGENTS.mdに明記。
-- **hooks**: (1)危険Git操作ガード — main/masterへの直接push・force push・`--no-verify`をdeny、その他の破壊的操作はask(自動承認モードでも確認が入る)。(2)日英同期リマインダー — `_en.md`対応ファイルを持つ日本語md編集時にエージェントへ通知。
-- **skills**: `adr`(ADRの作成・非推奨化手順)と`sync-docs-en`(日英同期手順)。hooksのリマインドとskillが連動する設計。
-- **copilot-code-review.yml**: 2026-07時点で公式ドキュメントに記載がないことを確認。過去リポジトリからの互換で残しつつ、確実な手段として`copilot-instructions.md`内の日本語レビュー指示を主とする。
-- **Dependabot cooldown**: サプライチェーン対策として標準装備し、AGENTS.mdのセキュリティ節に「承認なしで削除禁止」を明記(過去リポジトリで発生した削除インシデントの再発防止)。
-- **採用しなかったもの**: 絵文字禁止は標準に採用、ASCII/日本語間スペース規則はレンダラ依存のため標準にせずsetup-guideのカスタマイズ候補に記載。サブエージェント並列運用パターンはプロジェクト依存が強いため同じくカスタマイズ候補とした。
+- AGENTS.md単一ソース: CopilotとCodexはAGENTS.mdをネイティブサポート(Copilotのコードレビュー/コーディングエージェント対応は2025-11のGitHub変更ログで確認)。Claude Codeは`CLAUDE.md`の`@AGENTS.md`でインポート。
+- 薄いポインタファイルには_en版を作らない: `CLAUDE.md`・`.github/copilot-instructions.md`は翻訳対象外とし、ルールをAGENTS.mdに明記。
+- hooks: (1)危険Git操作ガード — main/masterへの直接push・force push・`--no-verify`をdeny、その他の破壊的操作はask(自動承認モードでも確認が入る)。(2)日英同期リマインダー — `_en.md`対応ファイルを持つ日本語md編集時にエージェントへ通知。
+- skills: `adr`(ADRの作成・非推奨化手順)と`sync-docs-en`(日英同期手順)。hooksのリマインドとskillが連動する設計。
+- copilot-code-review.yml: 2026-07時点で公式ドキュメントに記載がないことを確認。過去リポジトリからの互換で残しつつ、確実な手段として`copilot-instructions.md`内の日本語レビュー指示を主とする。
+- Dependabot cooldown: サプライチェーン対策として標準装備し、AGENTS.mdのセキュリティ節に「承認なしで削除禁止」を明記(過去リポジトリで発生した削除インシデントの再発防止)。
+- 採用しなかったもの: 絵文字禁止は標準に採用、ASCII/日本語間スペース規則はレンダラ依存のため標準にせずsetup-guideのカスタマイズ候補に記載。サブエージェント並列運用パターンはプロジェクト依存が強いため同じくカスタマイズ候補とした。
 
 ## 2026-07-05: セキュリティ強化・参考文献・運用ノート・Vibe Coding切替ガイドの追加
 
@@ -50,12 +50,12 @@
 
 3社共通の推奨のうち、初版時点で不足していたのは以下で、今回反映した:
 
-- **外部由来コンテンツの指示に従わない(プロンプトインジェクション対策)**: AGENTS.mdセキュリティ節に追加(Claude Code Security・Copilot cloud agentリスク緩和・Codex approvalsの3文書が共通して指摘。Issue/PRコメント経由の実証攻撃報告もあり)
-- **依存パッケージの実在・タイポスクワッティング確認**: AGENTS.mdに追加
-- **シークレットファイルのコミット防止**: .gitignoreに`.env`系を追加、`git add .env`をフックでask化
-- **ダウンロードスクリプトの直接実行(`curl | sh`)**: フックでask化(Claude Codeがcurl/wgetを自動承認しない設計に合わせ、他モードでも効くガードとして)
-- **エージェントが自分のガードを外すことの防止**: protect-config.shを新設(`.claude/settings.json`・hooks・workflows・dependabot.ymlの変更をask化)。Codexのレビューアポリシーが「永続的なセキュリティ弱体化」を検査する設計に倣った
-- **認証情報ディレクトリの保護**: permissions.denyに`~/.ssh`・`~/.aws`を追加
+- 外部由来コンテンツの指示に従わない(プロンプトインジェクション対策): AGENTS.mdセキュリティ節に追加(Claude Code Security・Copilot cloud agentリスク緩和・Codex approvalsの3文書が共通して指摘。Issue/PRコメント経由の実証攻撃報告もあり)
+- 依存パッケージの実在・タイポスクワッティング確認: AGENTS.mdに追加
+- シークレットファイルのコミット防止: .gitignoreに`.env`系を追加、`git add .env`をフックでask化
+- ダウンロードスクリプトの直接実行(`curl | sh`): フックでask化(Claude Codeがcurl/wgetを自動承認しない設計に合わせ、他モードでも効くガードとして)
+- エージェントが自分のガードを外すことの防止: protect-config.shを新設(`.claude/settings.json`・hooks・workflows・dependabot.ymlの変更をask化)。Codexのレビューアポリシーが「永続的なセキュリティ弱体化」を検査する設計に倣った
+- 認証情報ディレクトリの保護: permissions.denyに`~/.ssh`・`~/.aws`を追加
 
 初版時点で既にカバーされていたもの: 人間レビュー必須のマージフロー、main直push禁止、シークレットのハードコード禁止、dependabot cooldown、破壊的操作の確認、生成コードの検証(検証コマンド+CI)。
 
@@ -77,10 +77,10 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 
 ### 見つかった問題と対処
 
-- **ADRルールの三重記述**(AGENTS.md・docs/adr/README.md・adrスキルに同じ手順が全文重複)+ **循環参照**(docs/adr/README.mdが「詳細はAGENTS.md」を指し、AGENTS.mdがREADMEを指す): `docs/adr/README.md`を唯一の正(スニペット含む完全版)とし、AGENTS.mdは1行+参照、スキルはトリガー+クイックリファレンスに縮小。
-- **整合性チェックリストの重複**(/commit・/ship・/consistency-checkにほぼ同じ項目): `/consistency-check`を正とし、/shipはそれを参照、/commitは簡易チェック3項目のみに縮小。
-- **コミット規約の重複記述**(AGENTS.md・/commit・/babysit-pr・personalで形式説明を繰り返し): AGENTS.mdを正とし、コマンド側は「AGENTS.mdに従う」+最小限の要点のみに。
-- **文章の冗長**: AGENTS.md・personal/global-instructions.mdの各節を、要件(確認が必要な操作・言語ルール・禁止事項・セキュリティ項目)を欠かさず圧縮。
+- ADRルールの三重記述(AGENTS.md・docs/adr/README.md・adrスキルに同じ手順が全文重複)+ 循環参照(docs/adr/README.mdが「詳細はAGENTS.md」を指し、AGENTS.mdがREADMEを指す): `docs/adr/README.md`を唯一の正(スニペット含む完全版)とし、AGENTS.mdは1行+参照、スキルはトリガー+クイックリファレンスに縮小。
+- 整合性チェックリストの重複(/commit・/ship・/consistency-checkにほぼ同じ項目): `/consistency-check`を正とし、/shipはそれを参照、/commitは簡易チェック3項目のみに縮小。
+- コミット規約の重複記述(AGENTS.md・/commit・/babysit-pr・personalで形式説明を繰り返し): AGENTS.mdを正とし、コマンド側は「AGENTS.mdに従う」+最小限の要点のみに。
+- 文章の冗長: AGENTS.md・personal/global-instructions.mdの各節を、要件(確認が必要な操作・言語ルール・禁止事項・セキュリティ項目)を欠かさず圧縮。
 - 設計方針「指示は簡潔に(1ルール1か所)」をtemplate-docs/READMEに明文化。
 
 ### 削らなかったもの
@@ -106,12 +106,26 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 
 「.gitattributesでmdはLF指定なのにCRLFのファイルがあり混乱した」との指摘を受けて調査した。
 
-- **原因**: 初期コミットのREADME.mdが、`.gitattributes`が追加される前のコミットでCRLFのままblobとして格納されていた。gitの属性はコミット/チェックアウト時にしか作用しないため、格納済みblobのCRLFは属性を後から追加しても残り続ける。「触っていないのにREADME.mdがmodified扱いになる」症状はこれが原因。
-- **現状**: 全blobと作業ツリーがLFであることを検証済み(該当blobはテンプレート初回コミットの書き直しで解消)。属性が効いている現在は、CRLFを書き込んでもコミット時にLFへ正規化されるため、リポジトリにCRLFのmdが入ることはない。
-- **反省**: セッション冒頭にこの異常(phantom modified)を観測しながら、原因を特定せず書き換えで通過していた。まさに「原因不明のままのワークアラウンド」であり、下記ルール追加のきっかけとした。
+- 原因: 初期コミットのREADME.mdが、`.gitattributes`が追加される前のコミットでCRLFのままblobとして格納されていた。gitの属性はコミット/チェックアウト時にしか作用しないため、格納済みblobのCRLFは属性を後から追加しても残り続ける。「触っていないのにREADME.mdがmodified扱いになる」症状はこれが原因。
+- 現状: 全blobと作業ツリーがLFであることを検証済み(該当blobはテンプレート初回コミットの書き直しで解消)。属性が効いている現在は、CRLFを書き込んでもコミット時にLFへ正規化されるため、リポジトリにCRLFのmdが入ることはない。
+- 反省: セッション冒頭にこの異常(phantom modified)を観測しながら、原因を特定せず書き換えで通過していた。まさに「原因不明のままのワークアラウンド」であり、下記ルール追加のきっかけとした。
 
 ### 対応
 
 - AGENTS.md「進め方」に追加: 想定外の挙動は原因を特定してから対処する。原因不明のままワークアラウンドで迂回しない(脆弱性や誤ったコード・アーキテクチャの温床になる)。やむを得ない場合は経緯を記録しユーザーに報告する。personal/global-instructions.mdにも同旨を追加。
 - `check-line-endings.sh`(新設): LFポリシーのファイルにCRLFが書き込まれたら警告するPostToolUseフック(CRLF指定の`*.ps1`等は除外)。テスト3ケースを追加し、全41ケースPASS。
 - setup-guide: 既存リポジトリへ後付け適用する場合の`git add --renormalize .`を追記(今回の原因と同型の事故の予防)。
+
+## 2026-07-05: check-line-endingsフックの撤回と、太字を見出しに使わないルールの追加
+
+### check-line-endingsフックの撤回
+
+前項で追加した`check-line-endings.sh`は、原因(属性追加前に格納された既存blob)に対して過剰な対応だったため、ユーザー判断で撤回した。改行コードはエディタ・gitattributes・renormalizeといった設定側で対応すべき内容であり、フックで都度監視する必要はない。settings.json・テストハーネス・READMEのフック表からも削除した(setup-guideの`git add --renormalize .`の記載は設定側の対応として維持)。
+
+### 太字を見出しに使わないルール
+
+`- 太字ラベル: 説明`のように太字へ見出し・ラベルの意味を持たせる書き方は、構造的な意味を書式で表現する誤りであるため禁止する(絵文字制限と同趣旨)。
+
+- AGENTS.mdの言語ルールに追加: 太字を見出しやラベルの代わりに使わない。ラベル付き箇条書きは「タイトル: 説明」形式で書く(コロン区切りは英語技術文書の一般的な慣例として採用)。
+- 既存ドキュメントを一括修正: template-docs配下の10ファイルにあった太字ラベル・太字強調をすべて平文化した。
+- 修正時の教訓: 一括置換で`feature/**`(コードスパン内のグロブパターン)の`**`まで除去してしまい、復元した。書式記号の一括置換ではコードスパン・コードブロック内の同一記号に注意する。
