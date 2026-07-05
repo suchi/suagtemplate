@@ -15,9 +15,9 @@
 - テンプレート自体のドキュメントは分離し、実運用ではそのフォルダを除けばそのまま使える形にする
 - 実運用リポジトリへの適用手順書も作成
 
-### 参考にした過去リポジトリ
+### 参考にした資料
 
-cc-todo、cc-todo-next、copyhooker、dotfiles-fm、gctetris、sucheme-go、sucheme-ruby、sucheme-python、tbpview、yfatest(各リポジトリのAGENTS.md・CLAUDE.md・copilot-instructions.md・commands等)
+オーナーの過去リポジトリ10件のエージェント設定ファイル一式(AGENTS.md・CLAUDE.md・copilot-instructions.md・commands等)。個別のリポジトリ名・アカウント情報は本リポジトリのドキュメントには記載しない方針。
 
 ### セッション中の決定事項(Q&A)
 
@@ -33,9 +33,9 @@ cc-todo、cc-todo-next、copyhooker、dotfiles-fm、gctetris、sucheme-go、such
 - **薄いポインタファイルには_en版を作らない**: `CLAUDE.md`・`.github/copilot-instructions.md`は翻訳対象外とし、ルールをAGENTS.mdに明記。
 - **hooks**: (1)危険Git操作ガード — main/masterへの直接push・force push・`--no-verify`をdeny、その他の破壊的操作はask(自動承認モードでも確認が入る)。(2)日英同期リマインダー — `_en.md`対応ファイルを持つ日本語md編集時にエージェントへ通知。
 - **skills**: `adr`(ADRの作成・非推奨化手順)と`sync-docs-en`(日英同期手順)。hooksのリマインドとskillが連動する設計。
-- **copilot-code-review.yml**: 2026-07時点で公式ドキュメントに記載がないことを確認。cc-todoからの互換で残しつつ、確実な手段として`copilot-instructions.md`内の日本語レビュー指示を主とする。
-- **Dependabot cooldown**: サプライチェーン対策として標準装備し、AGENTS.mdのセキュリティ節に「承認なしで削除禁止」を明記(sucheme-goで発生した削除インシデントの再発防止)。
-- **採用しなかったもの**: 絵文字禁止(tbpreview)は標準に採用、ASCII/日本語間スペース規則(tbpreview)はレンダラ依存のため標準にせずsetup-guideのカスタマイズ候補に記載。サブエージェント並列運用パターン(cc-todo-next)はプロジェクト依存が強いため同じくカスタマイズ候補とした。
+- **copilot-code-review.yml**: 2026-07時点で公式ドキュメントに記載がないことを確認。過去リポジトリからの互換で残しつつ、確実な手段として`copilot-instructions.md`内の日本語レビュー指示を主とする。
+- **Dependabot cooldown**: サプライチェーン対策として標準装備し、AGENTS.mdのセキュリティ節に「承認なしで削除禁止」を明記(過去リポジトリで発生した削除インシデントの再発防止)。
+- **採用しなかったもの**: 絵文字禁止は標準に採用、ASCII/日本語間スペース規則はレンダラ依存のため標準にせずsetup-guideのカスタマイズ候補に記載。サブエージェント並列運用パターンはプロジェクト依存が強いため同じくカスタマイズ候補とした。
 
 ## 2026-07-05: セキュリティ強化・参考文献・運用ノート・Vibe Coding切替ガイドの追加
 
@@ -86,3 +86,16 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 ### 削らなかったもの
 
 検証コマンド表・言語ルール表・セキュリティ節の各項目・PR/レビュー/マージの禁止事項・babysit-prの運用ノウハウ(gh 2.88.0要件等)は、いずれも過去の実インシデントまたは公式推奨に由来するため維持。
+
+## 2026-07-05: アカウント情報の除去とメンテナンスガイドの追加
+
+### 要望
+
+1. 過去の経験に基づくことは記載してよいが、個別のアカウント情報(ユーザー名・リポジトリ名)をテンプレート・ドキュメントに残さない。
+2. テンプレート自体を今後運用・改良していくための指針を、テンプレートではなくtemplate-docs側に追加する。
+
+### 対応
+
+- ユーザー名入りURLと過去リポジトリの個別名を、全ドキュメント14か所で汎用表現に置換(personal・references・history・README・setup-guide)。「個別のリポジトリ名・アカウント情報は記載しない」を以後の方針としてmaintenance.mdに明記。
+- `maintenance.md` / `_en.md`を新設: 原則(AGENTS.mdフロー遵守・1ルール1か所・汎用のもののみ昇格・日英同期とhistory追記の義務)、変更種類ごとの推奨手順(実プロジェクトからの知見還元・フック変更・コマンド/スキル変更・公式仕様への定期追従)、リリース運用、PR前チェックリスト。
+- フックのテストハーネスを`tests/hook-tests.sh`としてリポジトリに同梱(従来はセッション内の一時スクリプト)。38ケースすべてPASSを確認。フック変更時はテストも同じ変更で追加する運用とした。

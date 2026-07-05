@@ -3,6 +3,8 @@
 This folder documents **the template (suagtemplate) itself** and is deleted in repositories created from the template for actual use.
 
 - Steps to apply to a new repository: [setup-guide_en.md](setup-guide_en.md)
+- Operating principles for the template itself (how to evolve it): [maintenance_en.md](maintenance_en.md)
+- Hook test harness: [tests/hook-tests.sh](tests/hook-tests.sh)
 - List of official documents consulted: [references_en.md](references_en.md)
 - Per-agent operation notes (caveats the template cannot express): [agent-notes_en.md](agent-notes_en.md)
 - What to change when switching to vibe coding (hands-off development): [vibe-coding_en.md](vibe-coding_en.md)
@@ -64,7 +66,7 @@ The hooks are shell scripts; on Windows they run via Git Bash (the same prerequi
 
 ### About copilot-code-review.yml
 
-`.github/copilot-code-review.yml` (`language: "ja"`) is not documented in the official GitHub docs as of 2026-07. It is kept for compatibility with an earlier repository (cc-todo), but the reliable way to get Japanese reviews is the instruction inside `.github/copilot-instructions.md`, which is the primary mechanism.
+`.github/copilot-code-review.yml` (`language: "ja"`) is not documented in the official GitHub docs as of 2026-07. It is kept for compatibility with the owner's earlier repositories, but the reliable way to get Japanese reviews is the instruction inside `.github/copilot-instructions.md`, which is the primary mechanism.
 
 ## When changing this template itself
 

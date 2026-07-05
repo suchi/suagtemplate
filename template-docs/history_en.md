@@ -15,9 +15,9 @@ A record of the process of improving this template together with agents. For eac
 - Separate the documentation of the template itself, so that in actual use the repository works as-is once that folder is removed
 - Also create a setup guide for applying the template to a production repository
 
-### Past repositories used as reference
+### Reference material
 
-cc-todo, cc-todo-next, copyhooker, dotfiles-fm, gctetris, sucheme-go, sucheme-ruby, sucheme-python, tbpview, yfatest (each repository's AGENTS.md, CLAUDE.md, copilot-instructions.md, commands, etc.)
+The full set of agent configuration files (AGENTS.md, CLAUDE.md, copilot-instructions.md, commands, etc.) from 10 of the owner's past repositories. As a policy, individual repository names and account information are not recorded in this repository's documentation.
 
 ### Decisions made during the session (Q&A)
 
@@ -33,9 +33,9 @@ cc-todo, cc-todo-next, copyhooker, dotfiles-fm, gctetris, sucheme-go, sucheme-ru
 - **No _en versions for thin pointer files**: `CLAUDE.md` and `.github/copilot-instructions.md` are excluded from translation; the rule is stated in AGENTS.md.
 - **Hooks**: (1) dangerous-git guard — denies direct/force pushes to main/master and `--no-verify`; escalates other destructive operations to ask (confirmation appears even in auto-accept modes). (2) ja/en sync reminder — notifies the agent when a Japanese md with an `_en.md` counterpart is edited.
 - **Skills**: `adr` (creating/deprecating ADRs) and `sync-docs-en` (ja/en sync procedure). Designed so the hook reminder and the skill work together.
-- **copilot-code-review.yml**: confirmed to be absent from the official docs as of 2026-07. Kept for compatibility with cc-todo, while the Japanese-review instruction inside `copilot-instructions.md` is the primary mechanism.
-- **Dependabot cooldown**: included as a standard supply-chain defense, with "never remove without approval" stated in the AGENTS.md security section (preventing a recurrence of the deletion incident that happened in sucheme-go).
-- **Not adopted**: the no-emoji rule (tbpreview) was adopted as standard; the no-space-between-ASCII-and-Japanese rule (tbpreview) is renderer-dependent, so it is a customization candidate in the setup guide instead. The parallel subagent operation patterns (cc-todo-next) are highly project-dependent and likewise listed as a customization candidate.
+- **copilot-code-review.yml**: confirmed to be absent from the official docs as of 2026-07. Kept for compatibility with past repositories, while the Japanese-review instruction inside `copilot-instructions.md` is the primary mechanism.
+- **Dependabot cooldown**: included as a standard supply-chain defense, with "never remove without approval" stated in the AGENTS.md security section (preventing a recurrence of a deletion incident that happened in a past repository).
+- **Not adopted**: the no-emoji rule was adopted as standard; the no-space-between-ASCII-and-Japanese rule is renderer-dependent, so it is a customization candidate in the setup guide instead. The parallel subagent operation patterns are highly project-dependent and likewise listed as a customization candidate.
 
 ## 2026-07-05: Security hardening, references, operation notes, and vibe coding switch guide
 
@@ -86,3 +86,16 @@ Based on Anthropic's guidance (concise instructions get better compliance), revi
 ### What was deliberately kept
 
 The verification-command table, language-rule table, every security item, the PR/review/merge prohibitions, and the babysit-pr operational knowledge (gh 2.88.0 requirement, etc.) were all kept, since each stems from a real past incident or an official recommendation.
+
+## 2026-07-05: Removal of account information and addition of the maintenance guide
+
+### Requests
+
+1. Stating that the template is based on past experience is fine, but individual account information (user names, repository names) must not remain in the template or its documentation.
+2. Add principles for operating and improving the template itself going forward — in template-docs, not in the template.
+
+### Actions
+
+- Replaced the user-name URL and individual past-repository names with generic wording in 14 places across the documentation (personal, references, history, README, setup-guide). Recorded "no individual repository names or account information" as an ongoing policy in maintenance.md.
+- Added `maintenance.md` / `_en.md`: principles (follow the AGENTS.md flow, one rule one home, promote only generic content, mandatory ja/en sync and history entries), recommended procedures per change type (feeding back knowledge from real projects, hook changes, command/skill changes, periodic tracking of official specs), release operation, and a pre-PR checklist.
+- Bundled the hook test harness as `tests/hook-tests.sh` in the repository (previously a session-local throwaway script). All 38 cases pass. Hook changes now must add matching test cases in the same change.
