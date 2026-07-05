@@ -135,4 +135,13 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 レビュー対応ループ(修正→スレッド返信→resolve→再レビュー依頼→No New Comment)を、環境を問わず`/babysit-pr <PR番号>`の一言で指示できるようにした。
 
 - `/babysit-pr`に「環境への適応」節を追加: ローカル(ghあり)はそのまま、claude.ai/code(Webセッション、ghなし)ではGitHub MCPツール+PRイベント購読(`subscribe_pr_activity`)で同じループを回し、マージ/クローズまたはユーザーの停止指示で購読解除する。
+
+## 2026-07-06: 個人設定にStopフック(git状態チェック)を追加
+
+セッション中に`~/.claude/`へ行った設定を、personal/の推奨テンプレートとして取り込んだ。
+
+- `stop-hook-git-check.sh`: 応答終了前に未コミット・未追跡・Unverifiedになるコミット・未プッシュを検知してエージェントに知らせるStopフック。GitHub生成コミット(committerが`noreply@github.com`)をUnverifiedと誤検知していた問題の修正を含み、期待するcommitterは変数化した。
+- `claude-user-settings-snippet.json`: `~/.claude/settings.json`へのフック登録スニペット。既存設定を壊さないよう自動マージはせず手動とした。
+- `install.sh` / `install.ps1`をコピー元・コピー先を取る形に一般化し、フック本体の配置に対応。
+- 推奨gitグローバル設定として`fetch.prune true`をREADMEに記載(マージで削除されたリモートブランチの追跡refが残ると、フックがunpushedを誤検知するため)。
 - agent-notesの「babysit-prはローカル用」の記述を実態に合わせて更新した。

@@ -135,4 +135,13 @@ Giving bold the meaning of a heading or label, as in `- bold label: description`
 Made the review-handling loop (fix, reply to threads, resolve, request re-review, until No New Comment) invocable with a single `/babysit-pr <PR number>` regardless of environment.
 
 - Added an "Environment adaptation" section to `/babysit-pr`: locally (with gh) it runs as written; in claude.ai/code (web sessions, no gh) it runs the same loop via the GitHub MCP tools plus PR event subscription (`subscribe_pr_activity`), unsubscribing on merge/close or when the user says to stop.
+
+## 2026-07-06: Added the Stop hook (git state check) to the personal configuration
+
+Settings applied to `~/.claude/` during the session were adopted into personal/ as recommended templates.
+
+- `stop-hook-git-check.sh`: a Stop hook that, before the agent finishes responding, detects uncommitted changes, untracked files, commits that will show as Unverified, and unpushed commits, and notifies the agent. Includes the fix for the false positive where GitHub-generated commits (committer `noreply@github.com`) were flagged as Unverified; the expected committer is now a variable.
+- `claude-user-settings-snippet.json`: the hook registration snippet for `~/.claude/settings.json`. Kept as a manual merge (not automated) to avoid clobbering existing settings.
+- Generalized `install.sh` / `install.ps1` to take source/destination pairs, adding placement of the hook itself.
+- Documented `fetch.prune true` as a recommended global git setting in the README (leftover remote-tracking refs of branches deleted on merge cause the hook to falsely report unpushed commits).
 - Updated the "babysit-pr is for local use" statement in agent-notes to match reality.

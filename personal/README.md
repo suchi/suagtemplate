@@ -7,6 +7,8 @@
 | ファイル | 反映先 |
 | --- | --- |
 | `global-instructions.md` | `~/.claude/CLAUDE.md`(Claude Code)、`~/.codex/AGENTS.md`(Codex) |
+| `stop-hook-git-check.sh` | `~/.claude/stop-hook-git-check.sh`(Claude CodeのStopフック本体) |
+| `claude-user-settings-snippet.json` | `~/.claude/settings.json`へ手動でマージ(Stopフックの登録) |
 | `copilot-personal-instructions.md` | GitHub Copilotの個人カスタム指示(手動で貼り付け) |
 
 ## 反映方法
@@ -16,7 +18,22 @@
 
 既存ファイルの内容が異なる場合は、タイムスタンプ付きの`.bak`にバックアップしてから上書きする。
 
-Copilotの個人指示はスクリプトで反映できないため、`copilot-personal-instructions.md`の手順に従って手動で貼り付ける。
+スクリプトで反映できない手動手順:
+
+- Stopフックの登録: `claude-user-settings-snippet.json`の内容を`~/.claude/settings.json`にマージする(既存設定を壊さないよう自動マージはしない)。
+- Copilotの個人指示: `copilot-personal-instructions.md`の手順に従って貼り付ける。
+
+## Stopフック(git状態チェック)について
+
+Claude Codeが応答を終える前に、未コミットの変更・未追跡ファイル・GitHubでUnverified表示になるコミット・未プッシュのコミットを検知してエージェントに知らせる。
+
+- GitHub生成のコミット(committerが`noreply@github.com`のマージ/squashコミット)はGitHub上でVerified表示になるため検査から除外している。
+- 署名の検査は`commit.gpgsign`が有効な環境(Claude Code on the Web等)でのみ動く。ローカルで自分の鍵で署名する場合はスクリプト冒頭の`expected_email`を調整する。
+- Claude Code on the Webでは同種のフックが環境側で配置されることがある。内容が異なる場合はインストール時にバックアップされる。
+
+## 推奨gitグローバル設定
+
+- `git config --global fetch.prune true`: マージで削除されたリモートブランチの追跡refを自動整理する。放置するとStopフックが「unpushed commits」を誤検知する原因になる。
 
 ## リポジトリのAGENTS.mdとの関係
 
