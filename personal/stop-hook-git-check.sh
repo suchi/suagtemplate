@@ -79,13 +79,17 @@ if [[ -n "$current_branch" ]]; then
     exit 2
   fi
 
-  # Commits GitHub will show as Unverified: unsigned (%G? == N) or signed
-  # with an unexpected committer email. Only checked when commit signing is
-  # configured. GitHub-generated commits are excluded (see github_email).
+  # Commits GitHub will show as Unverified: unsigned (%G? == N), a bad
+  # signature (%G? == B), or signed with an unexpected committer email.
+  # %G? values E/U (signature cannot be checked locally, e.g. the signer's
+  # public key is not in the local keyring) are intentionally NOT flagged:
+  # commits signed by Claude Code on the web report E locally while showing
+  # as Verified on GitHub. Only checked when commit signing is configured.
+  # GitHub-generated commits are excluded (see github_email).
   if [[ "$(git config --type=bool commit.gpgsign 2>/dev/null)" == "true" ]]; then
-    unverifiable=$(git log --format='%h %G? %ce' "$upstream..HEAD" 2>/dev/null | awk -v ok="$expected_email" -v gh="$github_email" '$3 != gh && ($2 == "N" || $3 != ok)')
+    unverifiable=$(git log --format='%h %G? %ce' "$upstream..HEAD" 2>/dev/null | awk -v ok="$expected_email" -v gh="$github_email" '$3 != gh && ($2 == "N" || $2 == "B" || $3 != ok)')
     if [[ -n "$unverifiable" ]]; then
-      echo "There are commit(s) on branch '$current_branch' that GitHub will show as Unverified (missing signature, or committer email is not $expected_email):" >&2
+      echo "There are commit(s) on branch '$current_branch' that GitHub will show as Unverified (missing or bad signature, or committer email is not $expected_email):" >&2
       echo "$unverifiable" >&2
       echo "Fix the committer identity of those commits (set user.email/user.name, then git commit --amend --no-edit; amending updates the committer and re-signs without changing the author), then push." >&2
       exit 2
