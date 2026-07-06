@@ -30,7 +30,7 @@ Before Claude Code finishes responding, it detects uncommitted changes, untracke
 - GitHub-generated commits (merge/squash commits with committer `noreply@github.com`) are signed with GitHub's web-flow key and show as Verified, so they are exempt from the committer-mismatch check (unsigned/broken signatures are detected regardless of committer).
 - The signature check only runs where `commit.gpgsign` is enabled (e.g. Claude Code on the web). If you sign locally with your own key, adjust `expected_email` at the top of the script.
 - Claude Code on the web may provision a similar hook on the environment side; if the content differs, the installer backs it up.
-- On native Windows, [Microsoft Core Utils](https://learn.microsoft.com/en-us/windows/core-utils/overview) is assumed to be available (it covers the coreutils-level commands). However, coreutils does not include bash or awk, so the hook itself (a bash script) runs through Git Bash — the same requirement as Claude Code's Bash tool. If `$HOME` does not resolve, adjust the command in settings.json to a full path.
+- On native Windows, [Microsoft Core Utils](https://learn.microsoft.com/en-us/windows/core-utils/overview) is assumed to be available ([microsoft/coreutils](https://github.com/microsoft/coreutils): a Microsoft build of the uutils coreutils, findutils, and grep; `winget install Microsoft.Coreutils`). However, bash, awk, and sed are not included, so the hook itself (a bash script) runs through Git Bash — the same requirement as Claude Code's Bash tool. If `$HOME` does not resolve, adjust the command in settings.json to a full path.
 
 ## Recommended global git configuration
 

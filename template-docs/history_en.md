@@ -144,5 +144,5 @@ Settings applied to `~/.claude/` during the session were adopted into personal/ 
 - `claude-user-settings-snippet.json`: the hook registration snippet for `~/.claude/settings.json`. Kept as a manual merge (not automated) to avoid clobbering existing settings.
 - Generalized `install.sh` / `install.ps1` to take source/destination pairs, adding placement of the hook itself.
 - Documented `fetch.prune true` as a recommended global git setting in the README (leftover remote-tracking refs of branches deleted on merge cause the hook to falsely report unpushed commits).
-- Stated the premise (specified by the user) that native Windows uses Microsoft Core Utils (the official coreutils implementation). Since coreutils does not include bash or awk, the hook itself runs through Git Bash — the same requirement as Claude Code's Bash tool.
+- Stated the premise (specified by the user) that native Windows uses Microsoft Core Utils (the official coreutils implementation). Verified against the microsoft/coreutils repository: it is a Microsoft build of the uutils coreutils, findutils, and grep, and does not include bash, awk, or sed. The hook itself therefore runs through Git Bash — the same requirement as Claude Code's Bash tool.
 - Updated the "babysit-pr is for local use" statement in agent-notes to match reality.
