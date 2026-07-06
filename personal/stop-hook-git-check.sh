@@ -18,7 +18,8 @@
 expected_email="noreply@anthropic.com"
 # GitHub-generated commits (merge/squash/suggestion commits) are signed by
 # GitHub's web-flow key and always show as Verified on GitHub, so they are
-# excluded from the check.
+# exempt from the committer-email mismatch check below (unsigned/broken
+# signatures are still detected regardless of committer email).
 github_email="noreply@github.com"
 
 input=$(cat)
