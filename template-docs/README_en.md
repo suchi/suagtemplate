@@ -22,6 +22,7 @@ A repository template preconfigured with standard precautions and my personal de
 ├── AGENTS.md / AGENTS_en.md      Single source of shared agent instructions (Japanese is canonical)
 ├── CLAUDE.md                     Pointer for Claude Code (only @AGENTS.md)
 ├── README.md / README_en.md      Repository README (rewritten in actual use)
+├── cspell.json                   Spell-check dictionary configuration
 ├── .github/
 │   ├── copilot-instructions.md   Thin pointer for Copilot + Japanese review instruction
 │   ├── copilot-code-review.yml   Review language setting (compatibility; see below)
