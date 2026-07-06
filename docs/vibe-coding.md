@@ -8,7 +8,7 @@
 
 ### AGENTS.md「進め方(Agentic Coding)」節の差し替え
 
-以下のスニペットで置き換える(AGENTS_en.mdも対応する内容に差し替える):
+以下のスニペットで置き換える(`template/`から作ったリポジトリでは対応する英語の内容に差し替える):
 
 ```markdown
 ## 進め方(Vibe Coding)
@@ -63,7 +63,7 @@
 
 ## 4. 切り替え手順まとめ
 
-1. AGENTS.md(+_en)の「進め方」節を上記スニペットに差し替える
+1. AGENTS.mdの「進め方」節を上記スニペットに差し替える
 2. `.claude/commands/commit.md`・`ship.md`の確認ステップを削る
 3. `.claude/settings.json`に`"defaultMode": "acceptEdits"`を追加する(permissions配下)
 4. CIにセキュリティスキャンを追加する

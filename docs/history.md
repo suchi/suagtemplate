@@ -146,3 +146,30 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 - 推奨gitグローバル設定として`fetch.prune true`をREADMEに記載(マージで削除されたリモートブランチの追跡refが残ると、フックがunpushedを誤検知するため)。
 - Windowsネイティブ環境はMicrosoft Core Utils(公式coreutils実装)を利用する前提を明記した(ユーザー指定)。microsoft/coreutilsリポジトリで内容を確認: uutils版coreutils・findutils・grepのMicrosoftビルドで、bash・awk・sedは含まれない。したがってフック本体の実行はGit Bash(Claude CodeのBashツールと同じ要件)とする整理。
 - agent-notesの「babysit-prはローカル用」の記述を実態に合わせて更新した。
+
+## 2026-07-06: 2テンプレート構成への再構成(/template/ と /template_ja/)
+
+### 要望
+
+トップに`/template/`(すべて英語)と`/template_ja/`(日本語でよいファイルは日本語)の2つのリポジトリテンプレートを持つ構成に再構成する。このリポジトリ自体のルール(テンプレート間の同期)や履歴は、トップと`/docs/`配下に日本語で記録する。
+
+### セッション中の決定事項(Q&A)
+
+1. `_en.md`ファイルと日英同期の仕組み(AGENTS.mdの同期ルール・同期チェックフック・同期スキル)は両テンプレートから除去する。同期はメタリポジトリ(このリポジトリ)のルールとなり、`template/`と`template_ja/`の対応ファイルを揃える新フックで支援する。
+2. メタ文書(トップREADME・AGENTS.md・docs/配下)は日本語のみとし、英語版(`_en.md`)は廃止する。英語の成果物は`template/`そのものが担う。
+3. `personal/`(個人グローバル設定の推奨)は各テンプレートの中に置く(英語版・日本語版)。
+4. セットアップガイドの主シナリオはフォルダコピー(degit等)とし、GitHubの「Use this template」は補足とする。
+
+### 構成の変更内容
+
+- `template/`(全英語)と`template_ja/`(日本語ベース)を新設。それぞれが自己完結したリポジトリテンプレート(AGENTS.md・CLAUDE.md・.github・.claude・docs/adr・personal)。
+- 旧`template-docs/ja/`の日本語コマンド訳は、`template_ja/.claude/commands/`の正式なコマンド(frontmatter・`$ARGUMENTS`付き)へ昇格した。
+- 旧トップのテンプレート一式・`_en.md`各種・`sync-docs-en`スキル・日英同期チェックフックは廃止した。
+- メタ文書は`template-docs/`から`docs/`へ移動した(history・references・agent-notes・vibe-coding)。setup-guide・maintenanceは2テンプレート構成に合わせて書き直した。
+- フックのテストハーネスは`docs/tests/hook-tests.sh`に移動し、新フックのケースと両テンプレートのコード類の同一性チェック(バイト一致)を追加した。
+
+### 主な設計判断
+
+- コード類(hooks・settings.json・install系スクリプト・dotfiles)は両テンプレートでバイト単位一致とし、テストで機械的に検証する。文書類(AGENTS.md・コマンド・スキル)は対訳として意味内容を一致させる。
+- 日英同期フック(旧check-docs-en-sync)の後継として、`template/`または`template_ja/`配下のファイル編集時に、もう一方の対応ファイルの同時更新を促すPostToolUseフック(check-template-sync.sh)をメタリポジトリ専用に新設した。対応ファイルが存在しない片側専用ファイル(例: `template_ja/.github/copilot-code-review.yml`)は対象外とする。
+- copilot-code-review.yml(レビュー言語の日本語指定)はtemplate_ja側にのみ同梱する。template側はレビュー言語の指定自体が不要なため、copilot-instructions.mdも薄いポインタのみとした。

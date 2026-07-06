@@ -1,24 +1,25 @@
 #!/bin/sh
-# Test harness for the .claude/hooks guard scripts.
+# Test harness for the Claude Code hooks shipped in the templates and for
+# this repository's own meta hooks.
 #
 # Usage (from anywhere inside the repository):
-#   sh template-docs/tests/hook-tests.sh
+#   sh docs/tests/hook-tests.sh
 #
 # Exits non-zero if any case fails. When adding or changing a hook rule,
-# add matching cases here in the same change (see template-docs/maintenance.md).
+# add matching cases here in the same change (see docs/maintenance.md).
 
 root=$(git rev-parse --show-toplevel 2>/dev/null) || { echo "not in a git repository" >&2; exit 1; }
 cd "$root" || exit 1
 
-git_hook=.claude/hooks/block-dangerous-git.sh
-cfg_hook=.claude/hooks/protect-config.sh
-sync_hook=.claude/hooks/check-docs-en-sync.sh
+git_hook=template/.claude/hooks/block-dangerous-git.sh
+cfg_hook=template/.claude/hooks/protect-config.sh
+sync_hook=.claude/hooks/check-template-sync.sh
 
 fails=0
 
 # Build a PATH without jq to exercise the fallback matching.
 nojq_path=$(mktemp -d)
-for c in sh dash bash grep sed cat git mktemp; do
+for c in sh dash bash grep sed cat git mktemp head awk; do
   p=$(command -v "$c" 2>/dev/null) && ln -s "$p" "$nojq_path/$c" 2>/dev/null
 done
 
@@ -102,10 +103,10 @@ expect ask  "edit settings.json"  "$cfg_hook" "$(path_payload /repo/.claude/sett
 expect ask  "edit hook script"    "$cfg_hook" "$(path_payload /repo/.claude/hooks/block-dangerous-git.sh)"
 expect ask  "edit workflow"       "$cfg_hook" "$(path_payload /repo/.github/workflows/ci.yml)"
 expect ask  "edit dependabot"     "$cfg_hook" "$(path_payload /repo/.github/dependabot.yml)"
-expect allow "edit source file"   "$cfg_hook" "$(path_payload /repo/src/app.ts)"
+expect allow "edit normal source" "$cfg_hook" "$(path_payload /repo/src/app.ts)"
 expect allow "edit AGENTS.md"     "$cfg_hook" "$(path_payload /repo/AGENTS.md)"
 
-echo "== check-docs-en-sync.sh =="
+echo "== check-template-sync.sh (meta hook) =="
 sync_case() {
   # $1: expected exit code, $2: description, $3: file path
   printf '%s' "$(path_payload "$3")" | sh "$sync_hook" >/dev/null 2>&1
@@ -117,10 +118,42 @@ sync_case() {
     fails=$((fails + 1))
   fi
 }
-sync_case 2 "ja doc with en counterpart" "$root/AGENTS.md"
-sync_case 0 "en doc itself"              "$root/AGENTS_en.md"
-sync_case 0 "pointer without en"         "$root/CLAUDE.md"
-sync_case 0 "non-markdown file"          "$root/.claude/settings.json"
+sync_case 2 "edit template file with counterpart"    "$root/template/AGENTS.md"
+sync_case 2 "edit template_ja file with counterpart" "$root/template_ja/.claude/commands/commit.md"
+sync_case 0 "edit meta doc"                          "$root/docs/history.md"
+sync_case 0 "edit ja-only file (no counterpart)"     "$root/template_ja/.github/copilot-code-review.yml"
+
+echo "== template code files identical =="
+same() {
+  if cmp -s "template/$1" "template_ja/$1"; then
+    echo "PASS [same] $1"
+  else
+    echo "FAIL [$1] differs between template/ and template_ja/"
+    fails=$((fails + 1))
+  fi
+}
+same .editorconfig
+same .gitattributes
+same .gitignore
+same .claude/settings.json
+same .claude/hooks/block-dangerous-git.sh
+same .claude/hooks/protect-config.sh
+same .github/dependabot.yml
+same CLAUDE.md
+same personal/install.sh
+same personal/install.ps1
+same personal/stop-hook-git-check.sh
+same personal/claude-user-settings-snippet.json
+
+echo "== root guard hooks identical to template copies =="
+for f in block-dangerous-git.sh protect-config.sh; do
+  if cmp -s ".claude/hooks/$f" "template/.claude/hooks/$f"; then
+    echo "PASS [same] .claude/hooks/$f"
+  else
+    echo "FAIL [.claude/hooks/$f] differs from template copy"
+    fails=$((fails + 1))
+  fi
+done
 
 rm -rf "$nojq_path"
 
