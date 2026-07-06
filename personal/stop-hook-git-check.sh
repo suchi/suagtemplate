@@ -22,8 +22,14 @@ github_email="noreply@github.com"
 input=$(cat)
 
 # Recursion prevention: do nothing if the stop hook is already active.
-stop_hook_active=$(echo "$input" | jq -r '.stop_hook_active' 2>/dev/null)
-if [[ "$stop_hook_active" == "true" ]]; then
+# Use jq when available; otherwise fall back to a crude string match,
+# which is sufficient for this guard.
+if command -v jq >/dev/null 2>&1; then
+  stop_hook_active=$(echo "$input" | jq -r '.stop_hook_active' 2>/dev/null)
+  if [[ "$stop_hook_active" == "true" ]]; then
+    exit 0
+  fi
+elif [[ "$input" == *'"stop_hook_active":true'* || "$input" == *'"stop_hook_active": true'* ]]; then
   exit 0
 fi
 
@@ -52,10 +58,17 @@ fi
 
 current_branch=$(git branch --show-current)
 if [[ -n "$current_branch" ]]; then
-  if git rev-parse "origin/$current_branch" >/dev/null 2>&1; then
-    upstream="origin/$current_branch"
-  else
-    upstream="origin/HEAD"
+  # Determine the comparison target: prefer the configured upstream, then
+  # the same-name branch on the first remote, then that remote's HEAD.
+  # (The remote is not necessarily named "origin".)
+  remote=$(git remote | head -n1)
+  upstream=$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null || true)
+  if [[ -z "$upstream" ]]; then
+    if git rev-parse --verify "$remote/$current_branch" >/dev/null 2>&1; then
+      upstream="$remote/$current_branch"
+    else
+      upstream="$remote/HEAD"
+    fi
   fi
 
   # Commits GitHub will show as Unverified: unsigned (%G? == N) or signed
