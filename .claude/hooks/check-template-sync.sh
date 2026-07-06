@@ -19,10 +19,16 @@ fi
 
 [ -n "$path" ] || exit 0
 
-# Normalize to a repository-relative path (hooks run at the project root).
-rel=$path
+# Normalize to a repository-relative path (hooks run at the project root)
+# so absolute, relative, and "./"-prefixed file_path values all match.
+root=${CLAUDE_PROJECT_DIR:-$PWD}
+case "$path" in
+  /*) ;;
+  *) path="$root/$path" ;;
+esac
+rel=${path#"$root"/}
 case "$rel" in
-  "$PWD"/*) rel=${rel#"$PWD"/} ;;
+  ./*) rel=${rel#./} ;;
 esac
 
 case "$rel" in
@@ -31,7 +37,7 @@ case "$rel" in
   *) exit 0 ;;
 esac
 
-if [ -f "$other" ]; then
+if [ -f "$root/$other" ]; then
   echo "Reminder: $rel has a counterpart at $other. Keep template/ and template_ja/ in sync in the same change (AGENTS.md: template sync rule). Code files must stay byte-identical; documents must stay equivalent in meaning." >&2
   exit 2
 fi

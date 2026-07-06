@@ -124,7 +124,10 @@ sync_case() {
 }
 sync_case 2 "edit template file with counterpart"    "$root/template/AGENTS.md"
 sync_case 2 "edit template_ja file with counterpart" "$root/template_ja/.claude/commands/commit.md"
+sync_case 2 "edit template file (relative path)"     "template/AGENTS.md"
+sync_case 2 "edit template_ja file (dot-relative)"   "./template_ja/AGENTS.md"
 sync_case 0 "edit meta doc"                          "$root/docs/history.md"
+sync_case 0 "edit meta doc (relative path)"          "docs/history.md"
 sync_case 0 "edit ja-only file (no counterpart)"     "$root/template_ja/.github/copilot-code-review.yml"
 
 echo "== template code files identical =="
