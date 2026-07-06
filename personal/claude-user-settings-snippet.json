@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$HOME/.claude/stop-hook-git-check.sh\""
+            "command": "bash \"$HOME/.claude/stop-hook-git-check.sh\""
           }
         ]
       }
