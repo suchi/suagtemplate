@@ -27,6 +27,7 @@
 - Pythonはpipではなくuvを使う(`uv sync --locked`・`uv run pytest`。CI/CDでは必ず`--locked`)。
 - 依存追加は慎重に。サプライチェーン対策(Dependabotの`cooldown`・uvの`exclude-newer = "7d"`)を私の承認なしに外さない。
 - 主環境はWindows 11(PowerShell)とWSL2。パス・コマンド例はどちらの環境かを確認してから提示する。
+- WindowsネイティブではMicrosoft Core Utils(公式coreutils実装)を利用する前提: https://learn.microsoft.com/ja-jp/windows/core-utils/overview
 
 ## 新しいリポジトリを始めるとき
 

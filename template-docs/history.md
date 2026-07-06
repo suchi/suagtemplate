@@ -144,4 +144,5 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 - `claude-user-settings-snippet.json`: `~/.claude/settings.json`へのフック登録スニペット。既存設定を壊さないよう自動マージはせず手動とした。
 - `install.sh` / `install.ps1`をコピー元・コピー先を取る形に一般化し、フック本体の配置に対応。
 - 推奨gitグローバル設定として`fetch.prune true`をREADMEに記載(マージで削除されたリモートブランチの追跡refが残ると、フックがunpushedを誤検知するため)。
+- Windowsネイティブ環境はMicrosoft Core Utils(公式coreutils実装)を利用する前提を明記した(ユーザー指定)。coreutilsにはbash・awkが含まれないため、フック本体の実行はGit Bash(Claude CodeのBashツールと同じ要件)とする整理。
 - agent-notesの「babysit-prはローカル用」の記述を実態に合わせて更新した。
