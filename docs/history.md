@@ -180,3 +180,4 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 - check-template-sync.shにも同様の正規化を追加(再レビュー指摘): 相対パス・`./`付きパスでもテンプレート配下の判定が働くよう、`CLAUDE_PROJECT_DIR`基準で絶対化してからリポジトリ相対に変換する。対応ファイルの存在確認もリポジトリルート基準にし、相対パスのテストケースを追加。
 - .editorconfigのPowerShellセクションを`[*.ps1]`のみに修正(再レビュー指摘): `.psd`/`.psm`は実在しない拡張子(正しくは`.psd1`/`.psm1`)で、`.gitattributes`が`*.psd1`/`*.psm1`をLFと定める方針とも矛盾して見えるため、CRLF指定は`.ps1`に限定した。
 - /shipの完了報告文言を/consistency-checkの正式表記(「整合性チェック OK」/ "consistency check OK")に統一(再レビュー指摘)。
+- stop-hook-git-check.shのjqへのJSON受け渡しを`echo`から`printf '%s'`に変更(再レビュー指摘): 入力が`-n`等で始まる場合のシェル実装差による誤動作を避け、他のフックと書き方を統一。

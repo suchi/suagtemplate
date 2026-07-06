@@ -28,7 +28,7 @@ input=$(cat)
 # Use jq when available; otherwise fall back to a crude string match,
 # which is sufficient for this guard.
 if command -v jq >/dev/null 2>&1; then
-  stop_hook_active=$(echo "$input" | jq -r '.stop_hook_active' 2>/dev/null)
+  stop_hook_active=$(printf '%s' "$input" | jq -r '.stop_hook_active' 2>/dev/null)
   if [[ "$stop_hook_active" == "true" ]]; then
     exit 0
   fi
