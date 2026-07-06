@@ -52,7 +52,7 @@ fi
 # Untracked files.
 untracked_files=$(git ls-files --others --exclude-standard)
 if [[ -n "$untracked_files" ]]; then
-  echo "There are untracked files in the repository. Please commit and push them." >&2
+  echo "There are untracked files in the repository. Add and commit them, add them to .gitignore, or remove them, then push." >&2
   exit 2
 fi
 
@@ -69,6 +69,14 @@ if [[ -n "$current_branch" ]]; then
     else
       upstream="$remote/HEAD"
     fi
+  fi
+
+  # Never skip silently: if the comparison target cannot be resolved (e.g.
+  # a remote added without fetching, or remote HEAD unset), say so instead
+  # of treating the checks below as passed.
+  if ! git rev-parse --verify "$upstream^{commit}" >/dev/null 2>&1; then
+    echo "Could not resolve '$upstream', so the push state of branch '$current_branch' cannot be verified. Set an upstream (git branch --set-upstream-to=...) or fetch the remote, then check manually." >&2
+    exit 2
   fi
 
   # Commits GitHub will show as Unverified: unsigned (%G? == N) or signed

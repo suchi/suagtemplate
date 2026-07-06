@@ -30,6 +30,7 @@ Claude Codeが応答を終える前に、未コミットの変更・未追跡フ
 - GitHub生成のコミット(committerが`noreply@github.com`のマージ/squashコミット)はGitHub上でVerified表示になるため検査から除外している。
 - 署名の検査は`commit.gpgsign`が有効な環境(Claude Code on the Web等)でのみ動く。ローカルで自分の鍵で署名する場合はスクリプト冒頭の`expected_email`を調整する。
 - Claude Code on the Webでは同種のフックが環境側で配置されることがある。内容が異なる場合はインストール時にバックアップされる。
+- フックはbashスクリプトであり、登録スニペットの`command`も`$HOME`前提のため、WindowsではGit Bash経由での実行が前提(WSL2推奨)。ネイティブWindowsで`$HOME`が解決されない場合は、settings.jsonのcommandをGit Bashで実行する形(フルパス指定)に調整する。
 
 ## 推奨gitグローバル設定
 

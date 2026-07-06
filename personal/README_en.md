@@ -30,6 +30,7 @@ Before Claude Code finishes responding, it detects uncommitted changes, untracke
 - GitHub-generated commits (merge/squash commits with committer `noreply@github.com`) are excluded from the check, since they show as Verified on GitHub.
 - The signature check only runs where `commit.gpgsign` is enabled (e.g. Claude Code on the web). If you sign locally with your own key, adjust `expected_email` at the top of the script.
 - Claude Code on the web may provision a similar hook on the environment side; if the content differs, the installer backs it up.
+- The hook is a bash script and the registration snippet's `command` assumes `$HOME`, so on Windows it assumes execution via Git Bash (WSL2 recommended). If `$HOME` does not resolve on native Windows, adjust the command in settings.json to run the script through Git Bash with a full path.
 
 ## Recommended global git configuration
 
