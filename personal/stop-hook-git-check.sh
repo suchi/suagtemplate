@@ -42,14 +42,14 @@ fi
 
 # Uncommitted changes (staged or unstaged).
 if ! git diff --quiet || ! git diff --cached --quiet; then
-  echo "There are uncommitted changes in the repository. Please commit and push them." >&2
+  echo "There are uncommitted changes in the repository. Please commit them." >&2
   exit 2
 fi
 
 # Untracked files.
 untracked_files=$(git ls-files --others --exclude-standard)
 if [[ -n "$untracked_files" ]]; then
-  echo "There are untracked files in the repository. Add and commit them, add them to .gitignore, or remove them, then push." >&2
+  echo "There are untracked files in the repository. Add and commit them, add them to .gitignore, or remove them." >&2
   exit 2
 fi
 
