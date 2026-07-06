@@ -59,7 +59,7 @@ if [[ -z "$(git remote)" ]]; then
   exit 0
 fi
 
-current_branch=$(git branch --show-current)
+current_branch=$(git branch --show-current 2>/dev/null)
 if [[ -n "$current_branch" ]]; then
   # Determine the comparison target: prefer the configured upstream, then
   # the same-name branch on the first remote, then that remote's HEAD.
