@@ -90,7 +90,7 @@ if [[ -n "$current_branch" ]]; then
   # public key is not in the local keyring) are intentionally NOT flagged:
   # commits signed by Claude Code on the web report E locally while showing
   # as Verified on GitHub. Only checked when commit signing is configured.
-  if [[ "$(git config --type=bool commit.gpgsign 2>/dev/null)" == "true" ]]; then
+  if [[ "$(git config --bool commit.gpgsign 2>/dev/null)" == "true" ]]; then
     unverifiable=$(git log --format='%h %G? %ce' "$upstream..HEAD" 2>/dev/null | awk -v ok="$expected_email" -v gh="$github_email" '$2 == "N" || $2 == "B" || ($3 != ok && $3 != gh)')
     if [[ -n "$unverifiable" ]]; then
       echo "There are commit(s) on branch '$current_branch' with an unsigned or bad signature, or a committer email other than $expected_email (these typically show as Unverified on GitHub):" >&2
