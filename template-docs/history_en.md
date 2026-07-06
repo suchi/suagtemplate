@@ -140,7 +140,7 @@ Made the review-handling loop (fix, reply to threads, resolve, request re-review
 
 Settings applied to `~/.claude/` during the session were adopted into personal/ as recommended templates.
 
-- `stop-hook-git-check.sh`: a Stop hook that, before the agent finishes responding, detects uncommitted changes, untracked files, commits that will show as Unverified, and unpushed commits, and notifies the agent. Includes the fix for the false positive where GitHub-generated commits (committer `noreply@github.com`) were flagged as Unverified; the expected committer is now a variable.
+- `stop-hook-git-check.sh`: a Stop hook that, before the agent finishes responding, detects uncommitted changes, untracked files, commits with signature problems (unsigned, broken signature, or committer mismatch — typically shown as Unverified on GitHub), and unpushed commits, and notifies the agent. Includes the fix for the false positive where GitHub-generated commits (committer `noreply@github.com`) were flagged as Unverified; the expected committer is now a variable.
 - `claude-user-settings-snippet.json`: the hook registration snippet for `~/.claude/settings.json`. Kept as a manual merge (not automated) to avoid clobbering existing settings.
 - Generalized `install.sh` / `install.ps1` to take source/destination pairs, adding placement of the hook itself.
 - Documented `fetch.prune true` as a recommended global git setting in the README (leftover remote-tracking refs of branches deleted on merge cause the hook to falsely report unpushed commits).

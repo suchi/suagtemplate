@@ -140,7 +140,7 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 
 セッション中に`~/.claude/`へ行った設定を、personal/の推奨テンプレートとして取り込んだ。
 
-- `stop-hook-git-check.sh`: 応答終了前に未コミット・未追跡・Unverifiedになるコミット・未プッシュを検知してエージェントに知らせるStopフック。GitHub生成コミット(committerが`noreply@github.com`)をUnverifiedと誤検知していた問題の修正を含み、期待するcommitterは変数化した。
+- `stop-hook-git-check.sh`: 応答終了前に未コミット・未追跡・署名に問題のあるコミット(未署名・署名破損・committer不一致。通常GitHubでUnverified表示になる)・未プッシュを検知してエージェントに知らせるStopフック。GitHub生成コミット(committerが`noreply@github.com`)をUnverifiedと誤検知していた問題の修正を含み、期待するcommitterは変数化した。
 - `claude-user-settings-snippet.json`: `~/.claude/settings.json`へのフック登録スニペット。既存設定を壊さないよう自動マージはせず手動とした。
 - `install.sh` / `install.ps1`をコピー元・コピー先を取る形に一般化し、フック本体の配置に対応。
 - 推奨gitグローバル設定として`fetch.prune true`をREADMEに記載(マージで削除されたリモートブランチの追跡refが残ると、フックがunpushedを誤検知するため)。

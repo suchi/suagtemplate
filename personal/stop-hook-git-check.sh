@@ -31,17 +31,12 @@ if command -v jq >/dev/null 2>&1; then
   if [[ "$stop_hook_active" == "true" ]]; then
     exit 0
   fi
-elif [[ "$input" == *'"stop_hook_active":true'* || "$input" == *'"stop_hook_active": true'* ]]; then
+elif [[ "$input" =~ \"stop_hook_active\"[[:space:]]*:[[:space:]]*true ]]; then
   exit 0
 fi
 
 # Bail when not in a git repository.
 if ! git rev-parse --git-dir >/dev/null 2>&1; then
-  exit 0
-fi
-
-# Bail when there is no remote to push to.
-if [[ -z "$(git remote)" ]]; then
   exit 0
 fi
 
@@ -56,6 +51,12 @@ untracked_files=$(git ls-files --others --exclude-standard)
 if [[ -n "$untracked_files" ]]; then
   echo "There are untracked files in the repository. Add and commit them, add them to .gitignore, or remove them, then push." >&2
   exit 2
+fi
+
+# Without a remote there is nothing to push to; the signature and push
+# checks below do not apply (the commit-state checks above still do).
+if [[ -z "$(git remote)" ]]; then
+  exit 0
 fi
 
 current_branch=$(git branch --show-current)
