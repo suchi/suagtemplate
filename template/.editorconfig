@@ -25,10 +25,10 @@ indent_size = 2
 [*.{js,ts,jsx,tsx,json,jsonc}]
 indent_size = 2
 
-# bat
+# bat/cmd: cmd.exe reads these in the system locale code page (e.g. CP932
+# on Japanese Windows), which EditorConfig's charset values cannot express;
+# configure the encoding in your editor instead.
 [*.{bat,cmd}]
-# charset = utf-8-bom
-charset = sjis
 end_of_line = crlf
 
 # powershell (.psd1/.psm1 stay LF; see .gitattributes)

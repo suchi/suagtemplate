@@ -181,3 +181,4 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 - .editorconfigのPowerShellセクションを`[*.ps1]`のみに修正(再レビュー指摘): `.psd`/`.psm`は実在しない拡張子(正しくは`.psd1`/`.psm1`)で、`.gitattributes`が`*.psd1`/`*.psm1`をLFと定める方針とも矛盾して見えるため、CRLF指定は`.ps1`に限定した。
 - /shipの完了報告文言を/consistency-checkの正式表記(「整合性チェック OK」/ "consistency check OK")に統一(再レビュー指摘)。
 - stop-hook-git-check.shのjqへのJSON受け渡しを`echo`から`printf '%s'`に変更(再レビュー指摘): 入力が`-n`等で始まる場合のシェル実装差による誤動作を避け、他のフックと書き方を統一。
+- .editorconfigの`[*.{bat,cmd}]`から`charset = sjis`を削除(再レビュー指摘): `sjis`はEditorConfig標準外の値で多くの実装が無視するため、無効な指定を置かず「cmd.exeはシステムロケールのコードページ(日本語WindowsはCP932)前提。エンコーディングはエディタ側で設定する」という意図をコメントで残した。Copilot案のutf-8-bomは、日本語Windowsのcmd.exeで文字化けの実害があるため採用しない。
