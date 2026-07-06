@@ -1,17 +1,28 @@
-# suagtemplate — AIエージェント設定テンプレート
+# suagtemplate — AIエージェント設定テンプレート集
 
-GitHub Copilot・Claude Code・Codexで開発するためのデフォルト設定を備えたリポジトリテンプレート。
+GitHub Copilot・Claude Code・Codexで開発するためのデフォルト設定を備えたリポジトリテンプレートを2種類提供する。
 
-エージェントへの指示はリポジトリルートの`AGENTS.md`に集約する単一ソース構成をとる。各エージェント固有のファイル(`CLAUDE.md`、`.github/copilot-instructions.md`)は`AGENTS.md`を参照する薄いファイルとして保つ。
+エージェントへの指示はリポジトリルートの`AGENTS.md`に集約する単一ソース構成をとる。各エージェント固有のファイル(`CLAUDE.md`・`.github/copilot-instructions.md`)は`AGENTS.md`を参照する薄いファイルとして保つ。
 
-## このテンプレートの使い方
+## テンプレート
 
-- テンプレート自体の説明・構成: [template-docs/README.md](template-docs/README.md)
-- 新しいリポジトリへ適用する手順: [template-docs/setup-guide.md](template-docs/setup-guide.md)
-- 個人(マシン)側のグローバル設定: [personal/README.md](personal/README.md)
+| フォルダ | 内容 |
+| --- | --- |
+| [template/](template/) | すべて英語のテンプレート |
+| [template_ja/](template_ja/) | ドキュメント・会話が日本語のテンプレート(コード・識別子は英語) |
 
-テンプレートから作成したリポジトリでは、`template-docs/`と`personal/`を削除し、このREADMEをプロジェクトのREADMEに書き換えること(手順は setup-guide 参照)。
+新しいリポジトリへの適用手順は[docs/setup-guide.md](docs/setup-guide.md)を参照。
 
-## 言語について
+## このリポジトリ自体について
 
-日本語のドキュメント`<名前>.md`が正で、`<名前>_en.md`はその英語版。日本語版を変更したときは英語版も必ず同時に更新する。
+このリポジトリはテンプレートを育てていくためのメタリポジトリで、その運用ルールは`AGENTS.md`(トップ)に、文書は`docs/`にまとめる。いずれも日本語で書く(決定事項)。
+
+- [docs/setup-guide.md](docs/setup-guide.md): テンプレートから実運用リポジトリを作る手順
+- [docs/maintenance.md](docs/maintenance.md): このリポジトリの運用指針(テンプレート間同期・変更手順)
+- [docs/history.md](docs/history.md): 変更履歴(セッション記録)
+- [docs/references.md](docs/references.md): 依拠した公式ドキュメント一覧
+- [docs/agent-notes.md](docs/agent-notes.md): エージェント別の運用ノート
+- [docs/vibe-coding.md](docs/vibe-coding.md): Vibe Coding切替ガイド
+- [docs/tests/hook-tests.sh](docs/tests/hook-tests.sh): フックのテストハーネス
+
+`template/`と`template_ja/`は構成・意味内容を常に同期する。コード類(hooks・settings・スクリプト)はバイト単位で同一、文書類は対訳として維持する(詳細は`AGENTS.md`と[docs/maintenance.md](docs/maintenance.md))。
