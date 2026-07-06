@@ -87,7 +87,7 @@ if [[ -n "$current_branch" ]]; then
     if [[ -n "$unverifiable" ]]; then
       echo "There are commit(s) on branch '$current_branch' that GitHub will show as Unverified (missing signature, or committer email is not $expected_email):" >&2
       echo "$unverifiable" >&2
-      echo "Fix the committer identity of those commits (set user.email/user.name, then git commit --amend --no-edit --reset-author), then push." >&2
+      echo "Fix the committer identity of those commits (set user.email/user.name, then git commit --amend --no-edit; amending updates the committer and re-signs without changing the author), then push." >&2
       exit 2
     fi
   fi
