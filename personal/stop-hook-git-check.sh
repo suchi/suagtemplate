@@ -3,9 +3,11 @@
 # responding, so work does not silently stop with uncommitted or unpushed
 # changes.
 #
-# Checks, in order: uncommitted changes, untracked files, commits that
-# GitHub will show as Unverified (only when commit signing is configured),
-# and unpushed commits. Exit code 2 feeds the message back to the agent.
+# Checks, in order: uncommitted changes, untracked files, commits with
+# signature problems (unsigned/broken signature or an unexpected committer
+# email — these typically show as Unverified on GitHub; only checked when
+# commit signing is configured), and unpushed commits. Exit code 2 feeds
+# the message back to the agent.
 #
 # Registration: merge claude-user-settings-snippet.json (in this folder)
 # into ~/.claude/settings.json manually.
@@ -79,17 +81,19 @@ if [[ -n "$current_branch" ]]; then
     exit 2
   fi
 
-  # Commits GitHub will show as Unverified: unsigned (%G? == N), a bad
-  # signature (%G? == B), or signed with an unexpected committer email.
+  # Commits with signature problems (typically shown as Unverified on
+  # GitHub): unsigned (%G? == N), a bad signature (%G? == B), or an
+  # unexpected committer email. N/B are flagged regardless of committer;
+  # only the email-mismatch check exempts GitHub-generated commits
+  # (github_email), which are signed by GitHub's web-flow key.
   # %G? values E/U (signature cannot be checked locally, e.g. the signer's
   # public key is not in the local keyring) are intentionally NOT flagged:
   # commits signed by Claude Code on the web report E locally while showing
   # as Verified on GitHub. Only checked when commit signing is configured.
-  # GitHub-generated commits are excluded (see github_email).
   if [[ "$(git config --type=bool commit.gpgsign 2>/dev/null)" == "true" ]]; then
-    unverifiable=$(git log --format='%h %G? %ce' "$upstream..HEAD" 2>/dev/null | awk -v ok="$expected_email" -v gh="$github_email" '$3 != gh && ($2 == "N" || $2 == "B" || $3 != ok)')
+    unverifiable=$(git log --format='%h %G? %ce' "$upstream..HEAD" 2>/dev/null | awk -v ok="$expected_email" -v gh="$github_email" '$2 == "N" || $2 == "B" || ($3 != ok && $3 != gh)')
     if [[ -n "$unverifiable" ]]; then
-      echo "There are commit(s) on branch '$current_branch' that GitHub will show as Unverified (missing or bad signature, or committer email is not $expected_email):" >&2
+      echo "There are commit(s) on branch '$current_branch' with an unsigned or bad signature, or a committer email other than $expected_email (these typically show as Unverified on GitHub):" >&2
       echo "$unverifiable" >&2
       echo "Fix the committer identity of those commits (set user.email/user.name, then git commit --amend --no-edit; amending updates the committer and re-signs without changing the author), then push." >&2
       exit 2

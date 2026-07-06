@@ -25,9 +25,9 @@ Manual steps that cannot be scripted:
 
 ## About the Stop hook (git state check)
 
-Before Claude Code finishes responding, it detects uncommitted changes, untracked files, commits that GitHub will show as Unverified, and unpushed commits, and notifies the agent.
+Before Claude Code finishes responding, it detects uncommitted changes, untracked files, commits with signature problems (unsigned, broken signature, or a committer that does not match the expected identity — these typically show as Unverified on GitHub), and unpushed commits, and notifies the agent.
 
-- GitHub-generated commits (merge/squash commits with committer `noreply@github.com`) are excluded from the check, since they show as Verified on GitHub.
+- GitHub-generated commits (merge/squash commits with committer `noreply@github.com`) are signed with GitHub's web-flow key and show as Verified, so they are exempt from the committer-mismatch check (unsigned/broken signatures are detected regardless of committer).
 - The signature check only runs where `commit.gpgsign` is enabled (e.g. Claude Code on the web). If you sign locally with your own key, adjust `expected_email` at the top of the script.
 - Claude Code on the web may provision a similar hook on the environment side; if the content differs, the installer backs it up.
 - The hook is a bash script and the registration snippet's `command` assumes `$HOME`, so on Windows it assumes execution via Git Bash (WSL2 recommended). If `$HOME` does not resolve on native Windows, adjust the command in settings.json to run the script through Git Bash with a full path.
