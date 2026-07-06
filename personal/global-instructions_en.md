@@ -27,6 +27,7 @@ Personal settings shared across all repositories. When a repository has its own 
 - For Python use uv, not pip (`uv sync --locked`, `uv run pytest`; always `--locked` in CI/CD).
 - Add dependencies carefully. Never remove supply-chain defenses (Dependabot `cooldown`, uv's `exclude-newer = "7d"`) without my approval.
 - Main environments are Windows 11 (PowerShell) and WSL2. Confirm which one applies before giving paths or command examples.
+- On native Windows, assume Microsoft Core Utils (the official coreutils implementation) is available: https://learn.microsoft.com/en-us/windows/core-utils/overview
 
 ## When starting a new repository
 
