@@ -173,3 +173,7 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 - コード類(hooks・settings.json・install系スクリプト・dotfiles)は両テンプレートでバイト単位一致とし、テストで機械的に検証する。文書類(AGENTS.md・コマンド・スキル)は対訳として意味内容を一致させる。
 - 日英同期フック(旧check-docs-en-sync)の後継として、`template/`または`template_ja/`配下のファイル編集時に、もう一方の対応ファイルの同時更新を促すPostToolUseフック(check-template-sync.sh)をメタリポジトリ専用に新設した。対応ファイルが存在しない片側専用ファイル(例: `template_ja/.github/copilot-code-review.yml`)は対象外とする。
 - copilot-code-review.yml(レビュー言語の日本語指定)はtemplate_ja側にのみ同梱する。template側はレビュー言語の指定自体が不要なため、copilot-instructions.mdも薄いポインタのみとした。
+
+### レビュー対応
+
+- protect-config.shを強化: `file_path`が相対パスで渡された場合に`*/`前提のcaseパターンを素通りし得る問題(Copilot指摘)への対応として、マッチ前に相対パスを`CLAUDE_PROJECT_DIR`(なければカレント)基準で絶対化する正規化を追加した。相対パスのテストケースも追加。

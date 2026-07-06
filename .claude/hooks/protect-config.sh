@@ -15,6 +15,13 @@ fi
 
 [ -n "$path" ] || exit 0
 
+# Normalize relative paths (hooks run in the project directory) so the
+# guard cannot be bypassed by passing a relative file_path.
+case "$path" in
+  /*) ;;
+  *) path="${CLAUDE_PROJECT_DIR:-$PWD}/$path" ;;
+esac
+
 case "$path" in
   */.claude/settings.json|*/.claude/settings.local.json|*/.claude/hooks/*|*/.github/workflows/*|*/.github/dependabot.yml)
     printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"Modifying security-related configuration: %s. Requires user approval (AGENTS.md: security)."}}\n' "$path"

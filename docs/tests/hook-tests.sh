@@ -103,7 +103,11 @@ expect ask  "edit settings.json"  "$cfg_hook" "$(path_payload /repo/.claude/sett
 expect ask  "edit hook script"    "$cfg_hook" "$(path_payload /repo/.claude/hooks/block-dangerous-git.sh)"
 expect ask  "edit workflow"       "$cfg_hook" "$(path_payload /repo/.github/workflows/ci.yml)"
 expect ask  "edit dependabot"     "$cfg_hook" "$(path_payload /repo/.github/dependabot.yml)"
+expect ask  "edit settings.json (relative path)"   "$cfg_hook" "$(path_payload .claude/settings.json)"
+expect ask  "edit hook script (dot-relative path)" "$cfg_hook" "$(path_payload ./.claude/hooks/protect-config.sh)"
+expect ask  "edit workflow (relative path)"        "$cfg_hook" "$(path_payload .github/workflows/ci.yml)"
 expect allow "edit normal source" "$cfg_hook" "$(path_payload /repo/src/app.ts)"
+expect allow "edit normal source (relative path)"  "$cfg_hook" "$(path_payload src/app.ts)"
 expect allow "edit AGENTS.md"     "$cfg_hook" "$(path_payload /repo/AGENTS.md)"
 
 echo "== check-template-sync.sh (meta hook) =="
