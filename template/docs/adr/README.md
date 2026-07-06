@@ -5,7 +5,7 @@ Records of technology choices and design decisions. One decision per file, named
 ## Rules
 
 - Record an ADR for every technology choice or design decision. The number is the existing maximum + 1. Add it to the index below.
-- Never overwrite or edit an existing ADR. When a decision changes:
+- Never rewrite the decision content of an existing ADR. The only allowed edit is the deprecation procedure below (status change and a note at the top). When a decision changes:
   1. Change the old ADR's status from accepted to deprecated and add at the top:
 
      ```markdown
