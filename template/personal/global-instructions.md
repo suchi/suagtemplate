@@ -30,4 +30,4 @@ Personal settings shared across all repositories. When a repository has its own 
 
 ## When starting a new repository
 
-- If a repository has no `AGENTS.md`, suggest adopting it from the agent configuration template (the suagtemplate repository).
+- If a repository has no `AGENTS.md`, suggest adopting it from the agent configuration template repository.
