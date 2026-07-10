@@ -14,13 +14,13 @@ Fill in the `TODO(project):` placeholders after creating a repository from the t
 
 <!-- TODO(project): replace with the actual commands -->
 
-| Purpose | Command |
-| --- | --- |
-| Setup | (not set) |
-| Test | (not set) |
+| Purpose       | Command   |
+| ------------- | --------- |
+| Setup         | (not set) |
+| Test          | (not set) |
 | Lint / format | (not set) |
-| Type check | (not set) |
-| Build | (not set) |
+| Type check    | (not set) |
+| Build         | (not set) |
 
 Always run tests and lint before committing. If this table is still unset, ask the user to configure it before starting implementation.
 
@@ -34,6 +34,21 @@ Work in Agentic Coding style, where the human decides — not fully hands-off vi
 - When a command or script behaves unexpectedly, identify the root cause before acting. Never route around it with a workaround while the cause is unknown (a breeding ground for vulnerabilities and wrong code/architecture). If a workaround is unavoidable, record the investigation and the reason (`Why:` comment, ADR) and report to the user.
 - For larger features, save a plan (SOW) under `docs/plans/` and implement after agreement.
 - Record important instructions received during sessions by appending them to this file.
+
+## Information sources
+
+Do not reference Qiita, Zenn, note, AI-generated articles, or SEO-oriented articles, except when explicitly asked to check a specific article.
+
+Prioritize sources in this order:
+
+- Official specifications, official documentation, release notes, and security advisories
+- Source code, tests, CHANGELOG, and releases in the official repository
+- Issues, Pull Requests, and Discussions in the official repository, especially statements by maintainers
+- Materials authored by the developers or core maintainers
+- Community information such as Stack Overflow, used only as a lead for further investigation
+  - Verify community information against a primary source before adopting it.
+  - Check the target version and the publication date of the information.
+- When something cannot be confirmed against a primary source, state that clearly and distinguish confirmed facts from speculation.
 
 ## Language rules
 
@@ -100,8 +115,8 @@ About behavior as an agent:
 
 ## Per-agent configuration files
 
-| Tool | Loading | Notes |
-| --- | --- | --- |
-| Claude Code | `CLAUDE.md` (imports via `@AGENTS.md`) | commands, skills, and hooks live under `.claude/` |
-| GitHub Copilot | Native `AGENTS.md` support | `.github/copilot-instructions.md` is a thin pointer only |
-| OpenAI Codex | Native `AGENTS.md` support | global configuration is `~/.codex/AGENTS.md` |
+| Tool           | Loading                                | Notes                                                    |
+| -------------- | -------------------------------------- | -------------------------------------------------------- |
+| Claude Code    | `CLAUDE.md` (imports via `@AGENTS.md`) | commands, skills, and hooks live under `.claude/`        |
+| GitHub Copilot | Native `AGENTS.md` support             | `.github/copilot-instructions.md` is a thin pointer only |
+| OpenAI Codex   | Native `AGENTS.md` support             | global configuration is `~/.codex/AGENTS.md`             |
