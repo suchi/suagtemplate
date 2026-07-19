@@ -162,6 +162,16 @@ for f in block-dangerous-git.sh protect-config.sh; do
   fi
 done
 
+echo "== root commands identical to template_ja copies =="
+for f in babysit-pr.md merge-pr.md commit.md ship.md consistency-check.md; do
+  if cmp -s ".claude/commands/$f" "template_ja/.claude/commands/$f"; then
+    echo "PASS [same] .claude/commands/$f"
+  else
+    echo "FAIL [.claude/commands/$f] differs from template_ja copy"
+    fails=$((fails + 1))
+  fi
+done
+
 rm -rf "$nojq_path"
 
 echo

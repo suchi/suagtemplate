@@ -39,5 +39,5 @@
 | `template/` | 全英語のリポジトリテンプレート |
 | `template_ja/` | 日本語ベースのリポジトリテンプレート |
 | `docs/` | メタ文書(setup-guide・maintenance・history・references・agent-notes・vibe-coding・tests) |
-| `.claude/` | このリポジトリ自体で作業するときの設定(テンプレートと同じガード+`check-template-sync.sh`) |
+| `.claude/` | このリポジトリ自体で作業するときの設定(テンプレートと同じガード+`check-template-sync.sh`+`template_ja/`と同一のコマンド) |
 | `.github/` | このリポジトリ自体のCopilot設定・dependabot |
