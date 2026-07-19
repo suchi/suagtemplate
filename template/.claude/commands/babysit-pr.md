@@ -13,7 +13,7 @@ Check PR #$ARGUMENTS for unresolved review threads and the latest review, and ha
    a. Fix the code and run the verification commands from AGENTS.md
    b. Commit (format per AGENTS.md) and push
    c. Reply to the thread describing the fix
-   (`gh api repos/{owner}/{repo}/pulls/$ARGUMENTS/comments --method POST -f body="Fixed: ..." -F in_reply_to=COMMENT_ID`)
+      (`gh api repos/{owner}/{repo}/pulls/$ARGUMENTS/comments --method POST -f body="Fixed: ..." -F in_reply_to=COMMENT_ID`)
    d. Resolve the thread with the `resolveReviewThread` GraphQL mutation
 4. Request a Copilot re-review: ALWAYS `gh pr edit $ARGUMENTS --add-reviewer @copilot` (requires gh >= 2.88.0). The REST endpoint `.../requested_reviewers` does not trigger a re-review on an already-reviewed PR.
 5. Wait until the criteria in "Determining review completion" below are met, then check for unresolved threads and new comments. If there are no unresolved threads and no new comments, report "No New Comment achieved". Do NOT merge — merging requires explicit user approval (/merge-pr).
