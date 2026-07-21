@@ -16,7 +16,16 @@ Check PR #$ARGUMENTS for unresolved review threads and the latest review, and ha
       (`gh api repos/{owner}/{repo}/pulls/$ARGUMENTS/comments --method POST -f body="Fixed: ..." -F in_reply_to=COMMENT_ID`)
    d. Resolve the thread with the `resolveReviewThread` GraphQL mutation
 4. Request a Copilot re-review: ALWAYS `gh pr edit $ARGUMENTS --add-reviewer @copilot` (requires gh >= 2.88.0). The REST endpoint `.../requested_reviewers` does not trigger a re-review on an already-reviewed PR.
-5. When no unresolved threads remain and the latest review generated no new comments, report "No New Comment achieved". Do NOT merge — merging requires explicit user approval (/merge-pr).
+5. Wait until the criteria in "Determining review completion" below are met, then check for unresolved threads and new comments. If there are no unresolved threads and no new comments, report "No New Comment achieved". Do NOT merge — merging requires explicit user approval (/merge-pr).
+
+## Determining review completion
+
+After requesting a re-review, do not consider the review complete until BOTH of the following hold (the watch loop polls these two conditions):
+
+- Copilot has disappeared from `users` in `gh api repos/{owner}/{repo}/pulls/$ARGUMENTS/requested_reviewers`.
+- A Copilot review (summary) with a non-empty body exists that was submitted after the request time. Judge by body length only; do not rely on heading strings (headings can change with format updates or language settings).
+
+Note: Copilot produces multiple review records per review. An empty-body COMMENTED review is the container for inline comments (an intermediate artifact) and must not be treated as a completion signal. If you treat the appearance of a single new review record as completion, you will misread an intermediate record arriving before the summary review as "no new findings".
 
 ## Environment adaptation
 

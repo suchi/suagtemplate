@@ -28,7 +28,7 @@
 
 ## テンプレート品質のルール
 
-- 個別のアカウント情報・リポジトリ名・件数などの詳細をテンプレート・ドキュメントに書かない(過去の経験に基づく知見を一般化して書くのはよい)。
+- 個別のアカウント情報・リポジトリ名・件数などの詳細をテンプレート・ドキュメントに書かない(過去の経験に基づく知見を一般化して書くのはよい)。このリポジトリ自体の名前も`template/`・`template_ja/`配下には書かない(適用先ではノイズになるため)。
 - `TODO(project):`プレースホルダを消さない(実運用リポジトリ側で埋める設計)。
 - フック・ガードを変更したら、同じ変更で`docs/tests/hook-tests.sh`にテストケースを追加し、全ケースPASSを確認する。
 
@@ -39,5 +39,5 @@
 | `template/` | 全英語のリポジトリテンプレート |
 | `template_ja/` | 日本語ベースのリポジトリテンプレート |
 | `docs/` | メタ文書(setup-guide・maintenance・history・references・agent-notes・vibe-coding・tests) |
-| `.claude/` | このリポジトリ自体で作業するときの設定(テンプレートと同じガード+`check-template-sync.sh`) |
+| `.claude/` | このリポジトリ自体で作業するときの設定(テンプレートと同じガード+`check-template-sync.sh`+`template_ja/`と同一のコマンド) |
 | `.github/` | このリポジトリ自体のCopilot設定・dependabot |
