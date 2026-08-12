@@ -23,6 +23,10 @@ Manual steps that cannot be scripted:
 - Stop hook registration: merge the content of `claude-user-settings-snippet.json` into `~/.claude/settings.json` (not automated, to avoid clobbering existing settings).
 - Copilot personal instructions: paste following `copilot-personal-instructions.md`.
 
+## Prerequisite tools
+
+- jq: required by the repository hooks (`.claude/hooks/`) to parse the tool input (JSON). Without it the hooks fail safe by asking for confirmation on every call instead of deciding, so install it on every machine with any package manager (e.g. Windows: `winget install jqlang.jq` or `scoop install jq`, Ubuntu/WSL2: `sudo apt-get install jq`).
+
 ## About the Stop hook (git state check)
 
 Before Claude Code finishes responding, it detects uncommitted changes, untracked files, commits with signature problems (unsigned, broken signature, or a committer email that does not match the expected one — these typically show as Unverified on GitHub), and unpushed commits, and notifies the agent.

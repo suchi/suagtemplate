@@ -8,27 +8,52 @@
 # as template_ja/.github/copilot-code-review.yml) are ignored.
 #
 # Exit code 2 feeds the reminder on stderr back to the agent.
+#
+# Requires jq to parse the hook payload (docs/setup-guide.md lists jq as a
+# prerequisite tool). If jq is missing or the payload does not parse, the
+# hook reminds the agent instead of silently doing nothing.
 
 input=$(cat)
 
-if command -v jq >/dev/null 2>&1; then
-  path=$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty')
-else
-  path=$(printf '%s' "$input" | sed -n 's/.*"file_path"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')
+if ! command -v jq >/dev/null 2>&1; then
+  echo "jq is required by check-template-sync.sh but was not found. Install jq (docs/setup-guide.md, step 2: personal global setup)." >&2
+  exit 2
 fi
+
+path=$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty' 2>/dev/null) || {
+  echo "check-template-sync.sh: failed to parse the hook payload as JSON; cannot check the template sync rule." >&2
+  exit 2
+}
 
 [ -n "$path" ] || exit 0
 
 # Normalize to a repository-relative path (hooks run at the project root)
 # so absolute, relative, and "./"-prefixed file_path values all match.
-root=${CLAUDE_PROJECT_DIR:-$PWD}
+# Backslashes are converted first because Windows-native setups pass paths
+# such as C:\repo\template\AGENTS.md.
+path=$(printf '%s' "$path" | tr '\\' '/')
+root=$(printf '%s' "${CLAUDE_PROJECT_DIR:-$PWD}" | tr '\\' '/')
 case "$path" in
-  /*) ;;
+  /*|[A-Za-z]:/*) ;;
   *) path="$root/$path" ;;
 esac
 rel=${path#"$root"/}
 case "$rel" in
   ./*) rel=${rel#./} ;;
+esac
+
+case "$rel" in
+  template/*|template_ja/*) ;;
+  *)
+    # The same absolute path can be spelled differently from $root on
+    # Windows (C:/... vs /c/...), which defeats the prefix strip above,
+    # so fall back to matching the template path segment.
+    case "$path" in
+      */template/*) rel="template/${path##*/template/}" ;;
+      */template_ja/*) rel="template_ja/${path##*/template_ja/}" ;;
+      *) exit 0 ;;
+    esac
+    ;;
 esac
 
 case "$rel" in

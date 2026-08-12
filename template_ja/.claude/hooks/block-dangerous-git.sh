@@ -5,24 +5,29 @@
 # (AGENTS.md) and asks for user confirmation on destructive ones, so the
 # guard also works in auto-accept permission modes.
 #
-# Uses jq to extract the command precisely when available; otherwise falls
-# back to matching against the raw JSON payload (less precise, still safe).
+# Requires jq to parse the hook payload (personal/README.md: prerequisite
+# tools). If jq is missing or the payload does not parse, the hook asks
+# instead of deciding, so the guard fails safe rather than silently
+# allowing everything.
 
 input=$(cat)
 
-if command -v jq >/dev/null 2>&1; then
-  cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty')
-else
-  cmd=$input
-fi
-
-[ -n "$cmd" ] || exit 0
-
 emit() {
-  # $1: permission decision (deny|ask), $2: reason (no double quotes allowed)
-  printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"%s","permissionDecisionReason":"%s"}}\n' "$1" "$2"
+  # $1: permission decision (deny|ask), $2: reason (escaped by jq)
+  jq -cn --arg decision "$1" --arg reason "$2" \
+    '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: $decision, permissionDecisionReason: $reason}}'
   exit 0
 }
+
+if ! command -v jq >/dev/null 2>&1; then
+  printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"jq is required by this hook but was not found. Install jq (personal/README.md: prerequisite tools)."}}\n'
+  exit 0
+fi
+
+cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null) ||
+  emit ask "Failed to parse the hook payload as JSON. Confirm with the user first."
+
+[ -n "$cmd" ] || exit 0
 
 has() {
   printf '%s' "$cmd" | grep -Eq "$1"
