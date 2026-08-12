@@ -115,8 +115,8 @@ About behavior as an agent:
 
 ## Per-agent configuration files
 
-| Tool           | Loading                                | Notes                                                    |
-| -------------- | -------------------------------------- | -------------------------------------------------------- |
-| Claude Code    | `CLAUDE.md` (imports via `@AGENTS.md`) | commands, skills, and hooks live under `.claude/`        |
-| GitHub Copilot | Native `AGENTS.md` support             | `.github/copilot-instructions.md` is a thin pointer only |
-| OpenAI Codex   | Native `AGENTS.md` support             | global configuration is `~/.codex/AGENTS.md`             |
+| Tool           | Loading                                | Notes                                                                                             |
+| -------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Claude Code    | `CLAUDE.md` (imports via `@AGENTS.md`) | commands and hooks live under `.claude/`; its skills forward to `.agents/skills/`                |
+| GitHub Copilot | Native `AGENTS.md` support             | `.github/copilot-instructions.md` is a thin pointer; shared skills live under `.agents/skills/` |
+| OpenAI Codex   | Native `AGENTS.md` support             | global configuration is `~/.codex/AGENTS.md`; shared skills live under `.agents/skills/`         |

@@ -229,3 +229,15 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 - 要望: ローカルに追加されていた`grill-me`スキル(計画・設計を共通理解に達するまで徹底的にインタビューする)の日本語版を作る。
 - 対応: `template_ja/.claude/skills/grill-me/SKILL.md`を対訳として作成した。スキル名・ディレクトリ名は識別子として英語のまま、本文と`description`を日本語にした(template_jaの言語ルール)。
 - 不具合修正: 英語版のファイル名が`SKILLmd`(ドット欠け)だった。Claude Codeは`.claude/skills/<name>/SKILL.md`のみを読むためスキルとして認識されない状態だったので、`SKILL.md`にリネームした。
+
+## 2026-08-12: GitHub Copilot・Claude Code・Codexでスキルを共有
+
+### 要望
+
+- Claude Code向けの`.claude/skills/`に置いていた`adr`と`grill-me`を、GitHub Copilotからも参照できるようにする。
+
+### 対応と設計判断
+
+- 両テンプレートの正のスキルを、GitHub Copilot・Claude Code・Codexがサポートする中立なリポジトリスキル配置`.agents/skills/<name>/SKILL.md`へ移した。英語テンプレートと日本語テンプレートは従来どおり対訳にした。
+- Claude Codeの`.claude/skills/<name>/SKILL.md`は発見用の薄いスキルにし、共有する正のスキルを参照する。内容の二重管理を避けながら、各ツールの発見場所を維持する。
+- 両テンプレートの`AGENTS.md`とREADMEに共有スキルの配置を記載した。

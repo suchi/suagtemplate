@@ -124,8 +124,8 @@ feat: add todo filter feature      ← 1行目: 英語・命令形・50文字以
 
 ## エージェント別の設定ファイル
 
-| ツール         | 読み込み                              | 補足                                                    |
-| -------------- | ------------------------------------- | ------------------------------------------------------- |
-| Claude Code    | `CLAUDE.md`(`@AGENTS.md`でインポート) | commands・skills・hooksは`.claude/`配下                 |
-| GitHub Copilot | `AGENTS.md`をネイティブサポート       | `.github/copilot-instructions.md`はレビュー言語指定のみ |
-| OpenAI Codex   | `AGENTS.md`をネイティブサポート       | グローバル設定は`~/.codex/AGENTS.md`                    |
+| ツール         | 読み込み                              | 補足                                                                            |
+| -------------- | ------------------------------------- | ------------------------------------------------------------------------------- |
+| Claude Code    | `CLAUDE.md`(`@AGENTS.md`でインポート) | commands・hooksは`.claude/`配下。skillsは`.agents/skills/`を参照する            |
+| GitHub Copilot | `AGENTS.md`をネイティブサポート       | `.github/copilot-instructions.md`は薄いポインタ。共有スキルは`.agents/skills/` |
+| OpenAI Codex   | `AGENTS.md`をネイティブサポート       | グローバル設定は`~/.codex/AGENTS.md`。共有スキルは`.agents/skills/`             |
