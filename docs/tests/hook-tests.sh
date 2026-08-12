@@ -35,6 +35,10 @@ decision() {
   else
     out=$(printf '%s' "$2" | sh "$1" 2>&1)
   fi
+  if [ -n "$out" ] && ! printf '%s' "$out" | jq -e . >/dev/null 2>&1; then
+    echo "invalid-json: $out"
+    return
+  fi
   case "$out" in
     *'"permissionDecision":"deny"'*) echo deny ;;
     *'"permissionDecision":"ask"'*) echo ask ;;
@@ -114,6 +118,21 @@ sync_nojq() {
 }
 sync_nojq
 
+echo "== unparseable payload (hooks fail safe) =="
+expect ask "bash guard on broken payload"   "$git_hook" '{"tool_input":'
+expect ask "config guard on broken payload" "$cfg_hook" '{"tool_input":'
+sync_broken() {
+  printf '%s' '{"tool_input":' | sh "$sync_hook" >/dev/null 2>&1
+  code=$?
+  if [ "$code" = 2 ]; then
+    echo "PASS [exit 2] sync hook on broken payload"
+  else
+    echo "FAIL [sync hook on broken payload] expected exit=2 got=$code"
+    fails=$((fails + 1))
+  fi
+}
+sync_broken
+
 echo "== protect-config.sh =="
 expect ask  "edit settings.json"  "$cfg_hook" "$(path_payload /repo/.claude/settings.json)"
 expect ask  "edit hook script"    "$cfg_hook" "$(path_payload /repo/.claude/hooks/block-dangerous-git.sh)"
@@ -124,6 +143,7 @@ expect ask  "edit hook script (dot-relative path)" "$cfg_hook" "$(path_payload .
 expect ask  "edit workflow (relative path)"        "$cfg_hook" "$(path_payload .github/workflows/ci.yml)"
 expect ask  "edit settings.json (Windows backslash path)" "$cfg_hook" "$(path_payload 'C:\\repo\\.claude\\settings.json')"
 expect ask  "edit hook script (Windows drive path)"       "$cfg_hook" "$(path_payload 'C:/repo/.claude/hooks/protect-config.sh')"
+expect ask  "edit hook path containing a quote"           "$cfg_hook" '{"tool_input":{"file_path":".claude/hooks/a\"b.sh"}}'
 expect allow "edit normal source" "$cfg_hook" "$(path_payload /repo/src/app.ts)"
 expect allow "edit normal source (relative path)"  "$cfg_hook" "$(path_payload src/app.ts)"
 expect allow "edit AGENTS.md"     "$cfg_hook" "$(path_payload /repo/AGENTS.md)"

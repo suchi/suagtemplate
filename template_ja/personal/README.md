@@ -25,7 +25,7 @@
 
 ## 前提ツール
 
-- jq: リポジトリ側のフック(`.claude/hooks/`)がツール入力(JSON)の解析に必要とする。未導入の場合、フックは判定せず毎回確認(ask)を求めるフェイルセーフ動作になるため、各マシンに導入する(Windows: `winget install jqlang.jq`、Ubuntu/WSL2: `sudo apt-get install jq`)。
+- jq: リポジトリ側のフック(`.claude/hooks/`)がツール入力(JSON)の解析に必要とする。未導入の場合、フックは判定せず毎回確認(ask)を求めるフェイルセーフ動作になるため、パッケージマネージャは問わないので各マシンに導入する(例: Windows: `winget install jqlang.jq`または`scoop install jq`、Ubuntu/WSL2: `sudo apt-get install jq`)。
 
 ## Stopフック(git状態チェック)について
 

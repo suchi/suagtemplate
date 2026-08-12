@@ -254,7 +254,14 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 - フェイルセーフ設計: jq未導入時に黙って全許可(素通り)になるのは最悪の失敗モードなので、PreToolUseフック(block-dangerous-git.sh・protect-config.sh)は毎回ask(理由に導入案内を表示)、PostToolUseフック(check-template-sync.sh)はexit 2のリマインダーで、必須ツールの欠落を即座に表面化させる。
 - protect-config.sh・check-template-sync.sh: Windows形式の絶対パス(`C:\...`・`C:/...`)を正規化できず、Windowsネイティブ環境でフックが一切発火しない問題を修正した。バックスラッシュを`/`へ変換し、ドライブレター絶対パスを認識する。check-template-syncは、同一パスの表記揺れ(`C:/...`と`/c/...`)でプレフィックス除去が失敗する場合に備え、`template/`・`template_ja/`セグメントでのフォールバックマッチを追加した。
 - hook-tests.sh: jqを隠すPATHの構築を`ln -s`からラッパースクリプト生成に変更した(Git BashではシンボリックリンクがDLLを伴わない実体コピーになり実行できないため)。旧フォールバック照合のテストを「jq欠落時にフェイルセーフになること」の検証に置き換え、Windowsパス(バックスラッシュ・ドライブレター)とコマンド末尾ガードのテストケースを追加した。
-- 文書化: jqを前提ツール(必須)として両テンプレートの`personal/README.md`とsetup-guide.mdに明記した。
+- 文書化: jqを前提ツール(必須)として両テンプレートの`personal/README.md`と`docs/setup-guide.md`に明記した。導入手段はパッケージマネージャを問わない(このマシンではWindowsはscoop、WSL2はaptで導入した。READMEの記載はwinget・scoop・aptの例示)。
+
+### レビュー対応
+
+- フックのJSON出力をprintfの直書きからjq構築(`--arg`)に変更し、理由文字列(`$path`埋め込みを含む)のエスケープを保証した(jq未導入時のask出力のみ静的文字列のprintfを維持)。
+- jqのペイロードパース失敗時にフェイルオープン(空値で素通り)になっていた点をフェイルセーフ化した(PreToolUseはask・PostToolUseはexit 2)。
+- テストハーネスに、フック出力がJSONとして妥当であることの検証、壊れたペイロード3ケース、引用符入りパスのケースを追加した。
+- jq導入コマンドの記載は例示(winget・scoop・apt)であることをpersonal/README.mdに明記し、history.md内のファイル参照を実パス表記(`docs/setup-guide.md`)に統一した。
 
 ### 記録
 

@@ -6,21 +6,26 @@
 # the guard also works in auto-accept permission modes.
 #
 # Requires jq to parse the hook payload (personal/README.md: prerequisite
-# tools). If jq is missing, the hook asks instead of deciding, so the guard
-# fails safe rather than silently allowing everything.
+# tools). If jq is missing or the payload does not parse, the hook asks
+# instead of deciding, so the guard fails safe rather than silently
+# allowing everything.
 
 input=$(cat)
 
 ask() {
-  # $1: reason (no double quotes allowed)
-  printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"%s"}}\n' "$1"
+  # $1: reason (escaped by jq)
+  jq -cn --arg reason "$1" \
+    '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "ask", permissionDecisionReason: $reason}}'
   exit 0
 }
 
-command -v jq >/dev/null 2>&1 ||
-  ask "jq is required by this hook but was not found. Install jq (personal/README.md: prerequisite tools)."
+if ! command -v jq >/dev/null 2>&1; then
+  printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"ask","permissionDecisionReason":"jq is required by this hook but was not found. Install jq (personal/README.md: prerequisite tools)."}}\n'
+  exit 0
+fi
 
-path=$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty')
+path=$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty' 2>/dev/null) ||
+  ask "Failed to parse the hook payload as JSON. Confirm with the user first."
 
 [ -n "$path" ] || exit 0
 

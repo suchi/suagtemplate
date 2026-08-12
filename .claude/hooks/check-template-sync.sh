@@ -10,17 +10,20 @@
 # Exit code 2 feeds the reminder on stderr back to the agent.
 #
 # Requires jq to parse the hook payload (docs/setup-guide.md lists jq as a
-# prerequisite tool). If jq is missing, the hook reminds the agent instead
-# of silently doing nothing.
+# prerequisite tool). If jq is missing or the payload does not parse, the
+# hook reminds the agent instead of silently doing nothing.
 
 input=$(cat)
 
 if ! command -v jq >/dev/null 2>&1; then
-  echo "jq is required by check-template-sync.sh but was not found. Install jq (docs/setup-guide.md: personal global setup)." >&2
+  echo "jq is required by check-template-sync.sh but was not found. Install jq (docs/setup-guide.md, step 2: personal global setup)." >&2
   exit 2
 fi
 
-path=$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty')
+path=$(printf '%s' "$input" | jq -r '.tool_input.file_path // empty' 2>/dev/null) || {
+  echo "check-template-sync.sh: failed to parse the hook payload as JSON; cannot check the template sync rule." >&2
+  exit 2
+}
 
 [ -n "$path" ] || exit 0
 

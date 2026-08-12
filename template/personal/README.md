@@ -25,7 +25,7 @@ Manual steps that cannot be scripted:
 
 ## Prerequisite tools
 
-- jq: required by the repository hooks (`.claude/hooks/`) to parse the tool input (JSON). Without it the hooks fail safe by asking for confirmation on every call instead of deciding, so install it on every machine (Windows: `winget install jqlang.jq`, Ubuntu/WSL2: `sudo apt-get install jq`).
+- jq: required by the repository hooks (`.claude/hooks/`) to parse the tool input (JSON). Without it the hooks fail safe by asking for confirmation on every call instead of deciding, so install it on every machine with any package manager (e.g. Windows: `winget install jqlang.jq` or `scoop install jq`, Ubuntu/WSL2: `sudo apt-get install jq`).
 
 ## About the Stop hook (git state check)
 
