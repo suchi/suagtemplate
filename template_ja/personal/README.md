@@ -23,7 +23,7 @@
 - Stopフックの登録: `claude-user-settings-snippet.json`の内容を`~/.claude/settings.json`にマージする(既存設定を壊さないよう自動マージはしない)。
 - Copilotの個人指示: `copilot-personal-instructions.md`の手順に従って貼り付ける。
 
-## 前提ツール
+## 前提ツール(prerequisite tools)
 
 - jq: リポジトリ側のフック(`.claude/hooks/`)がツール入力(JSON)の解析に必要とする。未導入の場合、フックは判定せず毎回確認(ask)を求めるフェイルセーフ動作になるため、パッケージマネージャは問わないので各マシンに導入する(例: Windows: `winget install jqlang.jq`または`scoop install jq`、Ubuntu/WSL2: `sudo apt-get install jq`)。
 

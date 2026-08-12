@@ -263,6 +263,7 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 - テストハーネスに、フック出力がJSONとして妥当であることの検証、壊れたペイロード3ケース、引用符入りパスのケースを追加した。
 - jq導入コマンドの記載は例示(winget・scoop・apt)であることをpersonal/README.mdに明記し、history.md内のファイル参照を実パス表記(`docs/setup-guide.md`)に統一した。
 - 再レビューのsuppressedコメントにも対応: hook-tests.sh自体もJSON妥当性検証にjqを使うため、テスト冒頭でjqの存在を検査し、未導入なら分かりやすいメッセージで停止するようにした。
+- フック(バイト同一のため英語メッセージ)が参照する`personal/README.md: prerequisite tools`から日本語版READMEへ誘導できるよう、日本語版の見出しに英語を併記した(`前提ツール(prerequisite tools)`)。
 
 ### 記録
 
