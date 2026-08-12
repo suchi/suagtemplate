@@ -262,6 +262,7 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 - jqのペイロードパース失敗時にフェイルオープン(空値で素通り)になっていた点をフェイルセーフ化した(PreToolUseはask・PostToolUseはexit 2)。
 - テストハーネスに、フック出力がJSONとして妥当であることの検証、壊れたペイロード3ケース、引用符入りパスのケースを追加した。
 - jq導入コマンドの記載は例示(winget・scoop・apt)であることをpersonal/README.mdに明記し、history.md内のファイル参照を実パス表記(`docs/setup-guide.md`)に統一した。
+- 再レビューのsuppressedコメントにも対応: hook-tests.sh自体もJSON妥当性検証にjqを使うため、テスト冒頭でjqの存在を検査し、未導入なら分かりやすいメッセージで停止するようにした。
 
 ### 記録
 

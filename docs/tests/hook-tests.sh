@@ -11,6 +11,10 @@
 root=$(git rev-parse --show-toplevel 2>/dev/null) || { echo "not in a git repository" >&2; exit 1; }
 cd "$root" || exit 1
 
+# The hooks under test and the JSON validation below require jq; stop with
+# a clear message instead of failing many cases with "invalid-json".
+command -v jq >/dev/null 2>&1 || { echo "jq is required to run these tests. Install jq first (see docs/setup-guide.md, step 2)." >&2; exit 1; }
+
 git_hook=template/.claude/hooks/block-dangerous-git.sh
 cfg_hook=template/.claude/hooks/protect-config.sh
 sync_hook=.claude/hooks/check-template-sync.sh
