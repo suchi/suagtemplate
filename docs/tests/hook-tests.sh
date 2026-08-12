@@ -17,10 +17,15 @@ sync_hook=.claude/hooks/check-template-sync.sh
 
 fails=0
 
-# Build a PATH without jq to exercise the fallback matching.
+# Build a PATH without jq to verify the hooks fail safe when the required
+# jq is missing. Wrapper scripts are used instead of symlinks because on
+# Git Bash (MSYS) ln -s copies the executable without its DLLs, which
+# breaks it.
 nojq_path=$(mktemp -d)
-for c in sh dash bash grep sed cat git mktemp head awk; do
-  p=$(command -v "$c" 2>/dev/null) && ln -s "$p" "$nojq_path/$c" 2>/dev/null
+for c in sh dash bash grep sed cat tr git mktemp head awk; do
+  p=$(command -v "$c" 2>/dev/null) || continue
+  printf '#!/bin/sh\nexec "%s" "$@"\n' "$p" > "$nojq_path/$c"
+  chmod +x "$nojq_path/$c"
 done
 
 decision() {
@@ -68,6 +73,7 @@ expect deny "recursive rm of root"    "$git_hook" "$(cmd_payload 'rm -rf /')"
 expect deny "recursive rm of home"    "$git_hook" "$(cmd_payload 'rm -rf ~')"
 expect ask  "force push feature"      "$git_hook" "$(cmd_payload 'git push --force origin feature/x')"
 expect ask  "push -f feature"         "$git_hook" "$(cmd_payload 'git push -f origin feature/x')"
+expect ask  "trailing push -f"        "$git_hook" "$(cmd_payload 'git push -f')"
 expect ask  "hard reset"              "$git_hook" "$(cmd_payload 'git reset --hard HEAD~1')"
 expect ask  "git clean -fd"           "$git_hook" "$(cmd_payload 'git clean -fd')"
 expect ask  "branch -D"               "$git_hook" "$(cmd_payload 'git branch -D old-branch')"
@@ -93,10 +99,20 @@ else
   expect allow "commit on feature branch" "$git_hook" "$(cmd_payload 'git commit -m x')"
 fi
 
-echo "== block-dangerous-git.sh (fallback without jq) =="
-expect deny  "push to main (nojq)"  "$git_hook" "$(cmd_payload 'git push origin main')" nojq
-expect ask   "hard reset (nojq)"    "$git_hook" "$(cmd_payload 'git reset --hard')" nojq
-expect allow "plain ls (nojq)"      "$git_hook" "$(cmd_payload 'ls -la')" nojq
+echo "== jq is required (hooks fail safe without it) =="
+expect ask "bash guard without jq"   "$git_hook" "$(cmd_payload 'ls -la')" nojq
+expect ask "config guard without jq" "$cfg_hook" "$(path_payload src/app.ts)" nojq
+sync_nojq() {
+  printf '%s' "$(path_payload docs/history.md)" | env PATH="$nojq_path" sh "$sync_hook" >/dev/null 2>&1
+  code=$?
+  if [ "$code" = 2 ]; then
+    echo "PASS [exit 2] sync hook without jq"
+  else
+    echo "FAIL [sync hook without jq] expected exit=2 got=$code"
+    fails=$((fails + 1))
+  fi
+}
+sync_nojq
 
 echo "== protect-config.sh =="
 expect ask  "edit settings.json"  "$cfg_hook" "$(path_payload /repo/.claude/settings.json)"
@@ -106,6 +122,8 @@ expect ask  "edit dependabot"     "$cfg_hook" "$(path_payload /repo/.github/depe
 expect ask  "edit settings.json (relative path)"   "$cfg_hook" "$(path_payload .claude/settings.json)"
 expect ask  "edit hook script (dot-relative path)" "$cfg_hook" "$(path_payload ./.claude/hooks/protect-config.sh)"
 expect ask  "edit workflow (relative path)"        "$cfg_hook" "$(path_payload .github/workflows/ci.yml)"
+expect ask  "edit settings.json (Windows backslash path)" "$cfg_hook" "$(path_payload 'C:\\repo\\.claude\\settings.json')"
+expect ask  "edit hook script (Windows drive path)"       "$cfg_hook" "$(path_payload 'C:/repo/.claude/hooks/protect-config.sh')"
 expect allow "edit normal source" "$cfg_hook" "$(path_payload /repo/src/app.ts)"
 expect allow "edit normal source (relative path)"  "$cfg_hook" "$(path_payload src/app.ts)"
 expect allow "edit AGENTS.md"     "$cfg_hook" "$(path_payload /repo/AGENTS.md)"
@@ -126,6 +144,8 @@ sync_case 2 "edit template file with counterpart"    "$root/template/AGENTS.md"
 sync_case 2 "edit template_ja file with counterpart" "$root/template_ja/.claude/commands/commit.md"
 sync_case 2 "edit template file (relative path)"     "template/AGENTS.md"
 sync_case 2 "edit template_ja file (dot-relative)"   "./template_ja/AGENTS.md"
+sync_case 2 "edit template file (Windows backslash path)" 'C:\\repo\\template\\AGENTS.md'
+sync_case 2 "edit template_ja file (Windows drive path)"  'C:/repo/template_ja/AGENTS.md'
 sync_case 0 "edit meta doc"                          "$root/docs/history.md"
 sync_case 0 "edit meta doc (relative path)"          "docs/history.md"
 sync_case 0 "edit ja-only file (no counterpart)"     "$root/template_ja/.github/copilot-code-review.yml"

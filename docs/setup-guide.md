@@ -30,6 +30,7 @@ cp -r suagtemplate/template_ja/. my-repo/
 - Linux / macOS / WSL2: `personal/install.sh`
 - Windows(PowerShell): `personal/install.ps1`
 - Copilotの個人指示とStopフックの登録は`personal/README.md`の手動手順に従う
+- フックが必要とするjqを各マシンに導入する(`personal/README.md`の前提ツールを参照)
 
 ## 3. READMEを書き換える
 

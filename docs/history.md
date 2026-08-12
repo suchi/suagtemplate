@@ -241,3 +241,22 @@ Anthropicの推奨(指示は簡潔なほど遵守率が高い)に基づき、全
 - 両テンプレートの正のスキルを、GitHub Copilot・Claude Code・Codexがサポートする中立なリポジトリスキル配置`.agents/skills/<name>/SKILL.md`へ移した。英語テンプレートと日本語テンプレートは従来どおり対訳にした。
 - Claude Codeの`.claude/skills/<name>/SKILL.md`は発見用の薄いスキルにし、共有する正のスキルを参照する。内容の二重管理を避けながら、各ツールの発見場所を維持する。
 - 両テンプレートの`AGENTS.md`とREADMEに共有スキルの配置を記載した。
+
+## 2026-08-12: フックのWindows対応とjq必須化(Issue #8)
+
+### 要望
+
+- 整合性チェックで検出したフックの不具合を修正する。jqは各マシンに導入済みの前提(必須)とする(Windows: scoop、WSL2のUbuntu-24.04: apt。WSLは複数ディストリビューションの混在を整理し、デフォルトのUbuntu-24.04に一本化した)。
+
+### 対応と設計判断
+
+- jqなしフォールバック(生JSONマッチ・sed抽出)を全フックから撤去した。調査の過程で、フォールバックは`curl ... | sh`や`git push -f`がコマンド末尾にあるとJSONの閉じ引用符に阻まれてガードが発火しない(ヘッダコメントの「still safe」が実態と不一致)ことを確認しており、精度の低い照合を保守し続けるよりjqを必須にする方を選んだ。
+- フェイルセーフ設計: jq未導入時に黙って全許可(素通り)になるのは最悪の失敗モードなので、PreToolUseフック(block-dangerous-git.sh・protect-config.sh)は毎回ask(理由に導入案内を表示)、PostToolUseフック(check-template-sync.sh)はexit 2のリマインダーで、必須ツールの欠落を即座に表面化させる。
+- protect-config.sh・check-template-sync.sh: Windows形式の絶対パス(`C:\...`・`C:/...`)を正規化できず、Windowsネイティブ環境でフックが一切発火しない問題を修正した。バックスラッシュを`/`へ変換し、ドライブレター絶対パスを認識する。check-template-syncは、同一パスの表記揺れ(`C:/...`と`/c/...`)でプレフィックス除去が失敗する場合に備え、`template/`・`template_ja/`セグメントでのフォールバックマッチを追加した。
+- hook-tests.sh: jqを隠すPATHの構築を`ln -s`からラッパースクリプト生成に変更した(Git BashではシンボリックリンクがDLLを伴わない実体コピーになり実行できないため)。旧フォールバック照合のテストを「jq欠落時にフェイルセーフになること」の検証に置き換え、Windowsパス(バックスラッシュ・ドライブレター)とコマンド末尾ガードのテストケースを追加した。
+- 文書化: jqを前提ツール(必須)として両テンプレートの`personal/README.md`とsetup-guide.mdに明記した。
+
+### 記録
+
+- これによりIssue #8(Windows Git Bashでのフックテスト6件失敗)が解消。WindowsネイティブとWSL2の両方で全ケースPASSを確認した。
+- 修正後のcheck-template-syncフックが、この変更作業中のWindows絶対パスでの編集で実際に発火することを確認した(従来は無反応だった)。

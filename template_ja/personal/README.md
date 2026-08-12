@@ -23,6 +23,10 @@
 - Stopフックの登録: `claude-user-settings-snippet.json`の内容を`~/.claude/settings.json`にマージする(既存設定を壊さないよう自動マージはしない)。
 - Copilotの個人指示: `copilot-personal-instructions.md`の手順に従って貼り付ける。
 
+## 前提ツール
+
+- jq: リポジトリ側のフック(`.claude/hooks/`)がツール入力(JSON)の解析に必要とする。未導入の場合、フックは判定せず毎回確認(ask)を求めるフェイルセーフ動作になるため、各マシンに導入する(Windows: `winget install jqlang.jq`、Ubuntu/WSL2: `sudo apt-get install jq`)。
+
 ## Stopフック(git状態チェック)について
 
 Claude Codeが応答を終える前に、未コミットの変更・未追跡ファイル・署名に問題のあるコミット(未署名・署名破損・committerメールが期待値と不一致。GitHubでは通常Unverified表示になる)・未プッシュのコミットを検知してエージェントに知らせる。
